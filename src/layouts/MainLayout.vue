@@ -15,6 +15,16 @@
           ABA реестр Админка
         </q-toolbar-title>
 
+        <!-- Кнопка для переключения темного режима -->
+        <q-btn
+          flat
+          dense
+          round
+          icon="brightness_4"
+          aria-label="Toggle Dark Mode"
+          @click="toggleDarkMode"
+        />
+
         <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
     </q-header>
@@ -25,9 +35,7 @@
       bordered
     >
       <q-list>
-        <q-item-label
-          header
-        >
+        <q-item-label header>
           Список функций
         </q-item-label>
 
@@ -74,36 +82,36 @@
         </div>
       </q-img>
 
-      <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px;
-      border-right: 1px solid #ddd">
-      <q-list padding>
-        <q-item clickable v-ripple>
-          <q-item-section avatar>
-            <q-icon name="person" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Профиль</q-item-label>
-          </q-item-section>
-        </q-item>
+      <q-scroll-area
+        style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
+        <q-list padding>
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="person" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Профиль</q-item-label>
+            </q-item-section>
+          </q-item>
 
-        <q-item clickable v-ripple>
-          <q-item-section avatar>
-            <q-icon name="settings" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Настройки</q-item-label>
-          </q-item-section>
-        </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="settings" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Настройки</q-item-label>
+            </q-item-section>
+          </q-item>
 
-        <q-item clickable v-ripple>
-          <q-item-section avatar>
-            <q-icon name="logout" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Выйти</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="logout" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Выйти</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
       </q-scroll-area>
     </q-drawer>
 
@@ -115,7 +123,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useQuasar } from 'quasar';
 
+const $q = useQuasar();
 const leftDrawerOpen = ref(false);
 const rightDrawerOpen = ref(false);
 
@@ -125,5 +135,10 @@ function toggleLeftDrawer() {
 
 function toggleRightDrawer() {
   rightDrawerOpen.value = !rightDrawerOpen.value;
+}
+
+// Функция для переключения темного режима
+function toggleDarkMode() {
+  $q.dark.toggle(); // Переключает между светлым и темным режимом
 }
 </script>
