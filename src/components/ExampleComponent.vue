@@ -7,7 +7,7 @@
       </li>
     </ul>
     <p>Count: {{ todoCount }} / {{ meta.totalCount }}</p>
-    <p>Active s: {{ active ? 'yes' : 'no' }}</p>
+    <p>Active: {{ active ? 'yes' : 'no' }}</p>
     <p>Clicks on todos: {{ clickCount }}</p>
   </div>
 </template>

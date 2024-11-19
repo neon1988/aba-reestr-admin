@@ -12,10 +12,10 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          ABA реестр Админка
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
     </q-header>
 
@@ -28,15 +28,83 @@
         <q-item-label
           header
         >
-          Essential Links
+          Список функций
         </q-item-label>
 
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
+        <q-item clickable v-ripple :to="{ name: 'centers.index' }">
+          <q-item-section avatar>
+            <q-icon name="apartment"/>
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Центры</q-item-label>
+            <q-item-label caption>
+              Список центров на модерации
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple :to="{ name: 'specialists.index' }">
+          <q-item-section avatar>
+            <q-icon name="person"/>
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Специалисты</q-item-label>
+            <q-item-label caption>
+              Список специалистов на модерации
+            </q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
+    </q-drawer>
+
+    <q-drawer
+      v-model="rightDrawerOpen"
+      side="right"
+      show-if-above
+      bordered>
+      <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+        <div class="absolute-bottom bg-transparent">
+          <q-avatar size="56px" class="q-mb-sm">
+            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+          </q-avatar>
+          <div class="text-weight-bold">Razvan Stoenescu</div>
+          <div>@rstoenescu</div>
+        </div>
+      </q-img>
+
+      <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px;
+      border-right: 1px solid #ddd">
+      <q-list padding>
+        <q-item clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon name="person" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Профиль</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon name="settings" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Настройки</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon name="logout" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Выйти</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+      </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
@@ -47,56 +115,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
-
-const linksList: EssentialLinkProps[] = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework',
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
-  },
-];
 
 const leftDrawerOpen = ref(false);
+const rightDrawerOpen = ref(false);
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+function toggleRightDrawer() {
+  rightDrawerOpen.value = !rightDrawerOpen.value;
 }
 </script>
