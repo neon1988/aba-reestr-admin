@@ -1,5 +1,5 @@
-import { defineBoot } from '#q-app/wrappers';
 import axios, { type AxiosInstance } from 'axios';
+import { defineBoot } from '#q-app/wrappers';
 
 declare module 'vue' {
   interface ComponentCustomProperties {
