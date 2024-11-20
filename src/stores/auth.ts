@@ -73,10 +73,11 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    initializeToken() {
+    async initializeToken() {
       const token = localStorage.getItem('token');
       if (token) {
         this.token = token;
+        await this.fetchUser();
       }
     },
   },
