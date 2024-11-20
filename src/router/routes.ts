@@ -18,6 +18,9 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'centers', name: 'centers.index', component: () => import('pages/Centers/IndexPage.vue'), meta: { requiresAuth: true },
       },
+      {
+        path: 'centers/:id', name: 'centers.show', component: () => import('pages/Centers/ShowPage.vue'), meta: { requiresAuth: true }, props: true,
+      },
     ],
   },
 

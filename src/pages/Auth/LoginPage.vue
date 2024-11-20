@@ -8,7 +8,7 @@
 
         <!-- Error message -->
         <q-card-section v-if="authStore.error" class="q-mt-md">
-          <q-banner inline-actions class="text-white bg-red">
+          <q-banner inline-actions rounded class="text-white bg-red">
             {{ authStore.error }}
           </q-banner>
         </q-card-section>

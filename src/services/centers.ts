@@ -16,3 +16,7 @@ export const updateCenter = (id: string | number, data: Partial<Center>) => api.
 
 // Удалить центр по ID
 export const deleteCenter = (id: string | number) => api.delete(`/centers/${id}`);
+
+export const approveCenter = (id: number) => api.put(`/centers/${id}/approve`);
+
+export const rejectCenter = (id: number) => api.put(`/centers/${id}/reject`);

@@ -5,7 +5,9 @@
     </q-toolbar>
 
     <div v-if="loading">
-      <loading-overlay :loading="loading" />
+      <q-inner-loading :showing="loading">
+        <q-spinner-gears size="5rem" color="primary" />
+      </q-inner-loading>
     </div>
 
     <div v-else-if="specialist" class="q-pa-md">
@@ -78,7 +80,6 @@ import { useQuasar } from 'quasar';
 
 import type { Specialist } from 'src/models/Specialist';
 import { approveSpecialist, getSpecialistById, rejectSpecialist } from 'src/services/specialists';
-import LoadingOverlay from 'components/LoadingOverlay.vue';
 
 const $q = useQuasar();
 const route = useRoute();
@@ -93,7 +94,7 @@ const fetchSpecialistHandler = async (id: string) => {
   loading.value = true;
   try {
     const response = await getSpecialistById(id);
-    specialist.value = response.data.data; // Данные специалиста от Laravel Resource
+    specialist.value = response.data.data as Specialist; // Данные специалиста от Laravel Resource
   } finally {
     loading.value = false;
   }
