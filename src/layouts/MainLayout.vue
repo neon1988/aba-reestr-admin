@@ -27,13 +27,13 @@
         />
 
         <q-avatar
-          v-if="authStore.isAuthenticated"
+          v-if="authStore.user"
           size="2rem"
-          class="cursor-pointer"
+          class="q-ml-md cursor-pointer"
           @click="toggleRightDrawer"
         >
-          <q-icon name="style" />
-          <img src="authStore.user.photo" alt="User Avatar" />
+          <img v-if="authStore.user.photo" :src="authStore.user.photo?.url || 'https://cdn.quasar.dev/img/boy-avatar.png'">
+          <q-icon v-else name="style" />
         </q-avatar>
       </q-toolbar>
     </q-header>

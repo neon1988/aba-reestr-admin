@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="q-pa-md">
     <q-toolbar>
       <q-toolbar-title>Специалисты на проверке</q-toolbar-title>
     </q-toolbar>
@@ -18,7 +18,7 @@
 
     <!-- Сообщение, если специалистов нет -->
     <div v-else class="q-mt-md text-center">
-      <q-banner class="bg-grey-3 text-grey-8">
+      <q-banner>
         Нет специалистов на проверке
       </q-banner>
     </div>

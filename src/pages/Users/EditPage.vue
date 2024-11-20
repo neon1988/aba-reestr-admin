@@ -1,8 +1,8 @@
 <template>
-  <q-page>
-    <q-card-section>
-      <div class="text-h6">Редактировать профиль</div>
-    </q-card-section>
+  <q-page class="q-pa-md">
+    <q-toolbar>
+      <q-toolbar-title>Редактировать профиль</q-toolbar-title>
+    </q-toolbar>
 
     <div v-if="loading">
       <q-inner-loading :showing="loading">
@@ -17,6 +17,10 @@
     </q-card-section>
 
     <q-card-section v-if="user">
+      <q-avatar size="56px" class="q-mb-lg">
+        <img :src="user.photo?.url || 'https://cdn.quasar.dev/img/boy-avatar.png'">
+      </q-avatar>
+
       <!-- Форма выбора изображения -->
       <q-file
         filled

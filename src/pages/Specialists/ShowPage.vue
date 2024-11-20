@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="q-pa-md">
     <q-toolbar>
       <q-toolbar-title>Информация о специалисте</q-toolbar-title>
     </q-toolbar>
