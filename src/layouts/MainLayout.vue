@@ -3,6 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="authStore.isAuthenticated"
           flat
           dense
           round
@@ -25,11 +26,19 @@
           @click="toggleDarkMode"
         />
 
-        <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
+        <q-btn
+          v-if="authStore.isAuthenticated"
+          dense
+          flat
+          round
+          icon="menu"
+          @click="toggleRightDrawer"
+        />
       </q-toolbar>
     </q-header>
 
     <q-drawer
+      v-if="authStore.isAuthenticated"
       v-model="leftDrawerOpen"
       show-if-above
       bordered
