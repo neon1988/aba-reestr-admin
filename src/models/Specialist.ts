@@ -1,4 +1,6 @@
 // src/models/Specialist.ts
+import type { Image } from 'src/models/Image';
+
 export interface Specialist {
   id: number;
   lastname: string;
@@ -19,4 +21,5 @@ export interface Specialist {
   created_at: string;
   updated_at: string;
   deleted_at?: string;
+  photo?: Image;
 }

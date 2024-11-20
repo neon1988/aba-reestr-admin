@@ -1,4 +1,6 @@
 // src/models/Center.ts
+import type { Image } from 'src/models/Image';
+
 export interface Center {
   id: number;
   name: string;
@@ -19,5 +21,5 @@ export interface Center {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-  photo: string | null;
+  photo?: Image;
 }

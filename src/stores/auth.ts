@@ -57,8 +57,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true;
       try {
         const response = await getAuthenticatedUser();
-        const data = response.data as User; // типизируем ответ
-        this.user = data; // Устанавливаем пользователя
+        this.user = response.data.data as User; // типизируем ответ
       } catch (error) {
         this.error = 'Не удалось загрузить данные пользователя';
       } finally {

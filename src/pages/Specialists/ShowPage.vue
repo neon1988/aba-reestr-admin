@@ -74,15 +74,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { ref, onMounted, defineProps } from 'vue';
+import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 
 import type { Specialist } from 'src/models/Specialist';
 import { approveSpecialist, getSpecialistById, rejectSpecialist } from 'src/services/specialists';
 
+// Определение пропсов
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
+});
+
 const $q = useQuasar();
-const route = useRoute();
 const router = useRouter();
 
 // Состояние для загрузки и данных
@@ -145,7 +152,6 @@ const goBack = () => {
 
 // Загружаем данные специалиста при монтировании компонента
 onMounted(() => {
-  const specialistId = route.params.id as string;
-  fetchSpecialistHandler(specialistId);
+  fetchSpecialistHandler(props.id); // Используем id из пропсов
 });
 </script>

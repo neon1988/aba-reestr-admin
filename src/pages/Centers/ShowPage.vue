@@ -14,7 +14,7 @@
 
       <!-- Фотография центра -->
       <div v-if="center.photo" class="q-mb-md">
-        <q-img :src="center.photo" alt="Фото центра" class="q-mb-md"/>
+        <q-img :src="center.photo.url" alt="Фото центра" class="q-mb-md"/>
       </div>
 
       <!-- Информация о центре -->
@@ -93,14 +93,21 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 
 import type { Center } from 'src/models/Center';
 import { approveCenter, getCenterById, rejectCenter } from 'src/services/centers';
 
+// Определение пропсов
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
+});
+
 const $q = useQuasar();
-const route = useRoute();
 const router = useRouter();
 
 // Состояние для загрузки и данных
@@ -163,7 +170,6 @@ const goBack = () => {
 
 // Загружаем данные специалиста при монтировании компонента
 onMounted(() => {
-  const centerId = route.params.id as string;
-  fetchCenterHandler(centerId);
+  fetchCenterHandler(props.id);
 });
 </script>
