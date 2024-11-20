@@ -68,6 +68,7 @@
     </q-drawer>
 
     <q-drawer
+      v-if="authStore.isAuthenticated"
       v-model="rightDrawerOpen"
       side="right"
       show-if-above
@@ -103,7 +104,7 @@
             </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple @click="logoutHandler">
             <q-item-section avatar>
               <q-icon name="logout" />
             </q-item-section>
@@ -124,8 +125,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from 'stores/auth';
 
 const $q = useQuasar();
+const authStore = useAuthStore();
+const router = useRouter();
+
 const leftDrawerOpen = ref(false);
 const rightDrawerOpen = ref(false);
 
@@ -141,4 +147,11 @@ function toggleRightDrawer() {
 function toggleDarkMode() {
   $q.dark.toggle(); // Переключает между светлым и темным режимом
 }
+
+const logoutHandler = async () => {
+  await authStore.logout(); // Вызов действия logout из Pinia
+  if (!authStore.isAuthenticated) {
+    router.push({ name: 'login' });
+  }
+};
 </script>

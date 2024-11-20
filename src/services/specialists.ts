@@ -13,3 +13,7 @@ export const createSpecialist = (data: Partial<Specialist>) => api.post('/specia
 export const updateSpecialist = (id: string, data: Partial<Specialist>) => api.put(`/specialists/${id}`, data);
 
 export const deleteSpecialist = (id: string) => api.delete(`/specialists/${id}`);
+
+export const approveSpecialist = (id: number) => api.put(`/specialists/${id}/approve`);
+
+export const rejectSpecialist = (id: number) => api.put(`/specialists/${id}/reject`);

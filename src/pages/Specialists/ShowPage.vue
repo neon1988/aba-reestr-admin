@@ -4,65 +4,131 @@
       <q-toolbar-title>Информация о специалисте</q-toolbar-title>
     </q-toolbar>
 
-    <div v-if="loading" class="q-mt-md text-center">
-      <q-spinner color="primary" />
+    <div v-if="loading">
+      <loading-overlay :loading="loading" />
     </div>
 
     <div v-else-if="specialist" class="q-pa-md">
+      <q-chip
+        v-if="specialist.status === 0"
+        color="green"
+        text-color="white"
+        icon="check"
+      >
+        Подтверждён
+      </q-chip>
+      <q-chip
+        v-else-if="specialist.status === 2"
+        color="red"
+        text-color="white"
+        icon="block"
+      >
+        Отклонён
+      </q-chip>
+      <q-chip
+        v-else-if="specialist.status === 1"
+        color="orange"
+        text-color="white"
+        icon="hourglass_empty"
+      >
+        На модерации
+      </q-chip>
+
       <q-card bordered>
         <q-card-section>
           <div class="text-h6">{{ specialist.firstname }} {{ specialist.lastname }}</div>
           <div class="q-mt-sm">Телефон: {{ specialist.phone }}</div>
           <div class="q-mt-sm">Статус: {{ specialist.status }}</div>
           <div class="q-mt-sm">Дата регистрации: {{ specialist.created_at }}</div>
-          <div class="q-mt-sm">Страна: {{ specialist.country }}</div>
-          <div class="q-mt-sm">Город: {{ specialist.city }}</div>
-          <div class="q-mt-sm">Образование: {{ specialist.education }}</div>
-          <div class="q-mt-sm">Регион: {{ specialist.region || 'Не указан' }}</div>
-          <div class="q-mt-sm">Доступность: {{ specialist.is_available }}</div>
-          <div v-if="specialist.center_id" class="q-mt-sm">Центр: {{ specialist.center_id }}</div>
-
         </q-card-section>
 
         <q-card-actions>
+          <!-- Кнопка для подтверждения -->
+          <q-btn
+            label="Подтвердить"
+            color="green"
+            @click="approveSpecialistHandler"
+            :disabled="specialist.status == 0 || loading"
+          />
+          <!-- Кнопка для отклонения -->
+          <q-btn
+            label="Отклонить"
+            color="red"
+            @click="rejectSpecialistHandler"
+            :disabled="specialist.status == 1 || loading"
+          />
           <q-btn flat label="Назад" @click="goBack" />
         </q-card-actions>
       </q-card>
     </div>
 
-    <!-- Если специалист не найден -->
     <div v-else class="q-mt-md text-center">
       <q-banner class="bg-grey-3 text-grey-8">
         Специалист не найден
       </q-banner>
     </div>
+
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { useQuasar } from 'quasar';
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import axios from 'axios';
+import { useQuasar } from 'quasar';
+
 import type { Specialist } from 'src/models/Specialist';
+import { approveSpecialist, getSpecialistById, rejectSpecialist } from 'src/services/specialists';
+import LoadingOverlay from 'components/LoadingOverlay.vue';
 
 const $q = useQuasar();
 const route = useRoute();
 const router = useRouter();
 
 // Состояние для загрузки и данных
-const loading = ref(true);
+const loading = ref(false);
 const specialist = ref<Specialist | null>(null);
 
 // Функция для загрузки данных о специалисте
-const fetchSpecialist = async (id: string) => {
+const fetchSpecialistHandler = async (id: string) => {
+  loading.value = true;
   try {
-    const response = await axios.get(`http://localhost/specialists/${id}`); // Путь к вашему API
+    const response = await getSpecialistById(id);
     specialist.value = response.data.data; // Данные специалиста от Laravel Resource
-  } catch (error) {
+  } finally {
+    loading.value = false;
+  }
+};
+
+// Функция для подтверждения специалиста
+const approveSpecialistHandler = async () => {
+  if (!specialist.value) return;
+
+  loading.value = true;
+  try {
+    const response = await approveSpecialist(specialist.value.id);
+    specialist.value = response.data.specialist;
     $q.notify({
-      message: `Ошибка при загрузке данных специалиста: ${error}`,
-      color: 'negative',
+      message: response.data.message,
+      color: 'positive',
+      position: 'top',
+      timeout: 3000,
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+// Функция для отклонения специалиста
+const rejectSpecialistHandler = async () => {
+  if (!specialist.value) return;
+
+  loading.value = true;
+  try {
+    const response = await rejectSpecialist(specialist.value.id);
+    specialist.value = response.data.specialist;
+    $q.notify({
+      message: response.data.message,
+      color: 'positive',
       position: 'top',
       timeout: 3000,
     });
@@ -79,6 +145,6 @@ const goBack = () => {
 // Загружаем данные специалиста при монтировании компонента
 onMounted(() => {
   const specialistId = route.params.id as string;
-  fetchSpecialist(specialistId);
+  fetchSpecialistHandler(specialistId);
 });
 </script>

@@ -1,17 +1,9 @@
 import {
   createMemoryHistory, createRouter, createWebHashHistory, createWebHistory,
 } from 'vue-router';
+import { useAuthStore } from 'src/stores/auth'; // Импортируем store для проверки аутентификации
 import { defineRouter } from '#q-app/wrappers';
 import routes from './routes';
-
-/*
- * If not building with SSR mode, you can
- * directly export the Router instantiation;
- *
- * The function below can be async too; either use
- * async/await or return a Promise which resolves
- * with the Router instance.
- */
 
 export default defineRouter((/* { store, ssrContext } */) => {
   const createHistory = process.env.SERVER
@@ -22,10 +14,22 @@ export default defineRouter((/* { store, ssrContext } */) => {
     scrollBehavior: () => ({ left: 0, top: 0 }),
     routes,
 
-    // Leave this as is and make changes in quasar.conf.js instead!
-    // quasar.conf.js -> build -> vueRouterMode
-    // quasar.conf.js -> build -> publicPath
+    // Включение истории в роутере
     history: createHistory(process.env.VUE_ROUTER_BASE),
+  });
+
+  // Глобальный навигационный guard для проверки аутентификации
+  Router.beforeEach((to, from, next) => {
+    const authStore = useAuthStore();
+
+    // Если маршрут требует аутентификации
+    if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+      // Перенаправляем на страницу входа
+      next({ name: 'login' });
+    } else {
+      // Разрешаем переход
+      next();
+    }
   });
 
   return Router;

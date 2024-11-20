@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Notify } from 'quasar';
 
 const api = axios.create({
-  baseURL: 'http://localhost', // базовый URL вашего API
+  baseURL: 'http://localhost/api', // базовый URL вашего API
   timeout: 10000, // Таймаут для запросов
   headers: {
     'Content-Type': 'application/json',

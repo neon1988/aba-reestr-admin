@@ -36,8 +36,8 @@
       />
     </div>
 
-    <!-- Загрузка данных -->
-    <q-spinner v-if="store.loading" color="primary" />
+    <loading-overlay :loading="store.loading" />
+
   </q-page>
 </template>
 
@@ -46,6 +46,7 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Specialist } from 'src/models/Specialist';
 import { useSpecialistsStore } from 'src/stores/specialistsStore';
+import LoadingOverlay from 'components/LoadingOverlay.vue';
 
 const router = useRouter();
 const store = useSpecialistsStore();
