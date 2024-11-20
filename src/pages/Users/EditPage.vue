@@ -10,12 +10,6 @@
       </q-inner-loading>
     </div>
 
-    <q-card-section v-if="message !== ''">
-      <q-banner inline-actions rounded class="bg-positive">
-        {{ message }}
-      </q-banner>
-    </q-card-section>
-
     <q-card-section v-if="user">
       <q-avatar size="56px" class="q-mb-lg">
         <img :src="user.photo?.url || 'https://cdn.quasar.dev/img/boy-avatar.png'">
@@ -82,12 +76,15 @@ import type { PropType } from 'vue';
 import { defineComponent, onMounted, ref } from 'vue';
 import { getUserById, updateUser, updateUserPhoto } from 'src/services/users';
 import type { User } from 'src/models/User';
-import { QFile, QBtn, QAvatar } from 'quasar';
+import {
+  QFile, QBtn, QAvatar, useQuasar,
+} from 'quasar';
+import { useAuthStore } from 'stores/auth';
 
 export default defineComponent({
   props: {
     id: {
-      type: String as PropType<string>,
+      type: Number as PropType<number>,
       required: true,
     },
   },
@@ -97,8 +94,9 @@ export default defineComponent({
     QAvatar,
   },
   setup(props) {
+    const authStore = useAuthStore();
+    const $q = useQuasar();
     const loading = ref(false);
-    const message = ref('');
     const user = ref<User | null>(null);
 
     const photo = ref<File | null>(null); // Переменная для хранения выбранного файла
@@ -127,26 +125,25 @@ export default defineComponent({
         loading.value = true;
         try {
           const response = await updateUserPhoto(id, photo.value);
-          user.value = response.data.data as User;
-          message.value = response.data.message;
-        } catch (error) {
-          message.value = 'Ошибка при загрузке изображения.';
+          user.value = response.data.user as User;
+          $q.notify({
+            message: response.data.message,
+            color: 'positive',
+            position: 'top',
+            timeout: 3000,
+          });
         } finally {
           loading.value = false;
         }
-      } else {
-        message.value = 'Пожалуйста, выберите изображение.';
       }
     };
 
     // Функция для загрузки данных о специалисте
-    const fetchUserHandler = async (id: string) => {
+    const fetchUserHandler = async (id: number) => {
       loading.value = true;
       try {
         const response = await getUserById(id);
         user.value = response.data.data as User; // Данные специалиста от Laravel Resource
-      } catch (error) {
-        message.value = 'Ошибка при загрузке данных пользователя.';
       } finally {
         loading.value = false;
       }
@@ -158,9 +155,19 @@ export default defineComponent({
       try {
         const response = await updateUser(props.id, user.value);
         user.value = response.data.user as User;
-        message.value = response.data.message;
-      } catch (error) {
-        message.value = 'Ошибка при сохранении изменений.';
+
+        $q.notify({
+          message: response.data.message,
+          color: 'positive',
+          position: 'top',
+          timeout: 3000,
+        });
+
+        if (props.id && authStore.user) {
+          if (authStore.user.id === props.id) {
+            await authStore.fetchUser();
+          }
+        }
       } finally {
         loading.value = false;
       }
@@ -176,7 +183,6 @@ export default defineComponent({
     return {
       loading,
       user,
-      message,
       photo,
       saveChangesHandler,
       imagePreview,
