@@ -8,18 +8,45 @@
 
     <div v-else-if="center">
       <!-- Заголовок -->
-      <q-toolbar>
+      <q-toolbar class="q-mb-md">
+        <q-btn flat icon="arrow_back" @click="goBack" class="q-mr-md" />
         <q-toolbar-title>{{ center.name }} - Центр</q-toolbar-title>
       </q-toolbar>
 
       <!-- Фотография центра -->
-      <div v-if="center.photo" class="q-mb-md">
-        <q-img :src="center.photo.url" alt="Фото центра" class="q-mb-md"/>
+      <div v-if="center.photo" class="q-mb-md text-center">
+        <q-img :src="center.photo?.url" alt="Фото центра"
+               class="q-mb-md"
+               style="border-radius: 8px; max-height: 250px; object-fit: cover;"/>
       </div>
 
       <!-- Информация о центре -->
       <q-card class="q-mb-md" bordered>
         <q-card-section>
+          <q-chip
+            v-if="center.status === StatusEnum.Accepted"
+            color="green"
+            text-color="white"
+            icon="check"
+          >
+            Подтверждён
+          </q-chip>
+          <q-chip
+            v-else-if="center.status === StatusEnum.Rejected"
+            color="red"
+            text-color="white"
+            icon="block"
+          >
+            Отклонён
+          </q-chip>
+          <q-chip
+            v-else-if="center.status === StatusEnum.OnReview"
+            color="orange"
+            text-color="white"
+            icon="hourglass_empty"
+          >
+            На проверке
+          </q-chip>
           <div class="text-h6">Основная информация</div>
           <q-separator class="q-my-sm"/>
           <div><strong>Юридическое название:</strong> {{ center.legal_name }}</div>
@@ -42,18 +69,6 @@
         </q-card-section>
       </q-card>
 
-      <!-- Статус и дата изменения статуса -->
-      <q-card class="q-mb-md" bordered>
-        <q-card-section>
-          <div class="text-h6">Статус центра</div>
-          <q-separator class="q-my-sm"/>
-          <div v-if="center.status !== null"><strong>Статус:</strong> {{ center.status }}</div>
-          <div v-if="center.status_changed_at">
-            <strong>Дата изменения статуса:</strong> {{ center.status_changed_at }}
-          </div>
-        </q-card-section>
-      </q-card>
-
       <!-- Дата создания и обновления -->
       <q-card class="q-mb-md" bordered>
         <q-card-section>
@@ -70,21 +85,20 @@
           label="Подтвердить"
           color="green"
           @click="approveCenterHandler"
-          :disabled="center.status == 0 || loading"
+          v-if="center.status != StatusEnum.Accepted && !loading"
         />
         <!-- Кнопка для отклонения -->
         <q-btn
+          v-if="center.status != StatusEnum.Rejected && !loading"
           label="Отклонить"
           color="red"
           @click="rejectCenterHandler"
-          :disabled="center.status == 1 || loading"
         />
-        <q-btn flat label="Назад" @click="goBack"/>
       </q-card-actions>
     </div>
 
     <div v-else class="q-mt-md text-center">
-      <q-banner class="bg-grey-3 text-grey-8">
+      <q-banner class="bg-negative">
         Центр не найден
       </q-banner>
     </div>
@@ -98,6 +112,7 @@ import { useQuasar } from 'quasar';
 
 import type { Center } from 'src/models/Center';
 import { approveCenter, getCenterById, rejectCenter } from 'src/services/centers';
+import { StatusEnum } from 'src/enums/StatusEnums';
 
 // Определение пропсов
 const props = defineProps({
@@ -114,18 +129,18 @@ const router = useRouter();
 const loading = ref(false);
 const center = ref<Center | null>(null);
 
-// Функция для загрузки данных о специалисте
+// Функция для загрузки данных о центре
 const fetchCenterHandler = async (id: string) => {
   loading.value = true;
   try {
     const response = await getCenterById(id);
-    center.value = response.data.data as Center; // Данные специалиста от Laravel Resource
+    center.value = response.data.data as Center;
   } finally {
     loading.value = false;
   }
 };
 
-// Функция для подтверждения специалиста
+// Функция для подтверждения центра
 const approveCenterHandler = async () => {
   if (!center.value) return;
 
@@ -144,7 +159,7 @@ const approveCenterHandler = async () => {
   }
 };
 
-// Функция для отклонения специалиста
+// Функция для отклонения центра
 const rejectCenterHandler = async () => {
   if (!center.value) return;
 
@@ -168,7 +183,7 @@ const goBack = () => {
   router.go(-1);
 };
 
-// Загружаем данные специалиста при монтировании компонента
+// Загружаем данные центра при монтировании компонента
 onMounted(() => {
   fetchCenterHandler(props.id);
 });

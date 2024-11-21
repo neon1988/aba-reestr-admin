@@ -1,24 +1,24 @@
-// stores/centersStore.ts
+// stores/usersStore.ts
 import { defineStore } from 'pinia';
-import type { Center } from 'src/models/Center';
+import type { User } from 'src/models/User';
 import type { Meta } from 'src/models/Pagination';
-import { getCenters } from 'src/services/centers';
+import { getUsers } from 'src/services/users';
 import { StatusEnum } from 'src/enums/StatusEnums';
 
-export const useCentersStore = defineStore('centers', {
+export const useUsersStore = defineStore('users', {
   state: () => ({
-    centers: [] as Center[],
+    users: [] as User[],
     meta: {} as Meta,
     currentPage: 1,
     loading: false,
     status: StatusEnum.OnReview as StatusEnum,
   }),
   actions: {
-    async fetchCenters() {
+    async fetchUsers() {
       this.loading = true;
       try {
-        const response = await getCenters(this.status, this.currentPage);
-        this.centers = response.data.data;
+        const response = await getUsers(this.currentPage);
+        this.users = response.data.data;
         this.meta = response.data.meta;
         this.currentPage = this.meta.current_page;
       } catch (error) {

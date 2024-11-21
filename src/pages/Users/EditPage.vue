@@ -1,6 +1,7 @@
 <template>
   <q-page class="q-pa-md">
     <q-toolbar>
+      <q-btn flat icon="arrow_back" @click="router.go(-1)" />
       <q-toolbar-title>Редактировать профиль</q-toolbar-title>
     </q-toolbar>
 
@@ -51,15 +52,6 @@
           class="q-mb-md"
         />
 
-        <!-- Электронная почта -->
-        <q-input
-          v-model="user.email"
-          outlined
-          label="Электронная почта"
-          type="email"
-          class="q-mb-md"
-        />
-
         <q-btn
           type="submit"
           label="Сохранить изменения"
@@ -80,6 +72,7 @@ import {
   QFile, QBtn, QAvatar, useQuasar,
 } from 'quasar';
 import { useAuthStore } from 'stores/auth';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   props: {
@@ -94,6 +87,7 @@ export default defineComponent({
     QAvatar,
   },
   setup(props) {
+    const router = useRouter();
     const authStore = useAuthStore();
     const $q = useQuasar();
     const loading = ref(false);
@@ -132,6 +126,12 @@ export default defineComponent({
             position: 'top',
             timeout: 3000,
           });
+
+          if (props.id && authStore.user) {
+            if (authStore.user.id === props.id) {
+              await authStore.fetchUser();
+            }
+          }
         } finally {
           loading.value = false;
         }
@@ -188,6 +188,7 @@ export default defineComponent({
       imagePreview,
       handleFileChange,
       uploadImage,
+      router,
     };
   },
 });

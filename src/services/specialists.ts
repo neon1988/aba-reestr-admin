@@ -1,8 +1,14 @@
 // src/services/specialists.ts
 import type { Specialist } from 'src/models/Specialist';
+import type { StatusEnum } from 'src/enums/StatusEnums';
 import api from './api';
 
-export const getSpecialists = (page: number = 1) => api.get(`/specialists?page=${page}`);
+export const getSpecialists = (status: StatusEnum, page: number = 1) => api.get('/specialists', {
+  params: {
+    status,
+    page,
+  },
+});
 
 export const getSpecialistsOnCheck = (page: number = 1) => api.get(`/specialists/on_check?page=${page}`);
 

@@ -1,17 +1,43 @@
 <template>
   <q-page class="q-pa-md">
     <q-toolbar>
-      <q-toolbar-title>Специалисты на проверке</q-toolbar-title>
+      <q-toolbar-title>Специалисты</q-toolbar-title>
     </q-toolbar>
+
+    <!-- Фильтр по статусу -->
+    <q-card-section class="q-mb-md">
+      <q-radio v-model="store.status" :val="StatusEnum.OnReview"
+               label="На проверке"
+               @update:model-value="applyFilter" />
+      <q-radio v-model="store.status" :val="StatusEnum.Accepted"
+               label="Проверенные"
+               @update:model-value="applyFilter" />
+      <q-radio v-model="store.status" :val="StatusEnum.Rejected"
+               label="Отклоненные"
+               @update:model-value="applyFilter" />
+    </q-card-section>
 
     <!-- Список специалистов -->
     <q-list v-if="store.specialists.length > 0">
-      <q-item v-for="specialist in store.specialists"
-              @click="viewSpecialist(specialist)"
-              :key="specialist.id" clickable>
+      <q-item
+        v-for="specialist in store.specialists"
+        @click="viewSpecialist(specialist)"
+        :key="specialist.id"
+        clickable
+      >
+        <!-- Секция с аватаром -->
+        <q-item-section avatar>
+          <specialist-photo :specialist="specialist" size="4rem" />
+        </q-item-section>
+
+        <!-- Секция с информацией -->
         <q-item-section>
-          <q-item-label>{{ specialist.firstname }}</q-item-label>
-          <q-item-label caption>{{ specialist.firstname }}</q-item-label>
+          <q-item-label class="text-h6" lines="1">
+            {{ specialist.lastname }} {{ specialist.firstname }}
+          </q-item-label>
+          <q-item-label caption>
+            {{ specialist.middlename }}
+          </q-item-label>
         </q-item-section>
       </q-item>
     </q-list>
@@ -19,11 +45,11 @@
     <!-- Сообщение, если специалистов нет -->
     <div v-else class="q-mt-md text-center">
       <q-banner>
-        Нет специалистов на проверке
+        Нет специалистов
       </q-banner>
     </div>
 
-    <div class="q-pa-lg flex flex-center">
+    <div v-if="store.meta.last_page > 1" class="q-pa-lg flex flex-center">
       <!-- Пагинация -->
       <q-pagination
         v-if="store.meta"
@@ -32,7 +58,7 @@
         :max="store.meta.last_page"
         :max-pages="7"
         boundary-numbers
-        @update:model-value="store.fetchSpecialists"
+        @update:model-value="handlePageChange"
       />
     </div>
 
@@ -42,7 +68,6 @@
         <q-spinner-gears size="5rem" color="primary" />
       </q-inner-loading>
     </div>
-
   </q-page>
 </template>
 
@@ -51,13 +76,26 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Specialist } from 'src/models/Specialist';
 import { useSpecialistsStore } from 'src/stores/specialistsStore';
+import { StatusEnum } from 'src/enums/StatusEnums';
+import SpecialistPhoto from 'components/SpecialistPhoto.vue';
 
 const router = useRouter();
 const store = useSpecialistsStore();
 
+// Метод для обновления данных при смене фильтра
+const applyFilter = () => {
+  store.currentPage = 1;
+  store.fetchSpecialists();
+};
+
+const handlePageChange = (page: number) => {
+  store.currentPage = page; // Обновляем текущую страницу
+  store.fetchSpecialists(); // Передаем фильтры
+};
+
 // Метод для просмотра специалиста
 const viewSpecialist = (specialist: Specialist) => {
-  router.push({ name: 'specialists.show', params: { id: specialist.id } }); // Переход на страницу с подробной информацией
+  router.push({ name: 'specialists.show', params: { id: specialist.id } });
 };
 
 // Загружаем данные при монтировании компонента

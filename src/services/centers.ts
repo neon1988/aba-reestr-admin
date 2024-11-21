@@ -1,9 +1,15 @@
 // src/services/centers.ts
 import type { Center } from 'src/models/Center'; // убедитесь, что модель Center создана
-import api from './api'; // импорт основного API-инстанса
+import type { StatusEnum } from 'src/enums/StatusEnums'; // импорт основного API-инстанса
+import api from './api';
 
 // Получить список центров с поддержкой пагинации
-export const getCenters = (page: number = 1) => api.get(`/centers?page=${page}`);
+export const getCenters = (status: StatusEnum, page: number = 1) => api.get('/centers', {
+  params: {
+    status,
+    page,
+  },
+});
 
 // Получить данные конкретного центра по ID
 export const getCenterById = (id: string | number) => api.get(`/centers/${id}`);

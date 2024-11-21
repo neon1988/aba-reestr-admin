@@ -57,20 +57,33 @@
           <q-item-section>
             <q-item-label>Центры</q-item-label>
             <q-item-label caption>
-              Список центров на модерации
+              Список центров
             </q-item-label>
           </q-item-section>
         </q-item>
 
         <q-item clickable v-ripple :to="{ name: 'specialists.index' }">
           <q-item-section avatar>
-            <q-icon name="person"/>
+            <q-icon name="badge"/>
           </q-item-section>
 
           <q-item-section>
             <q-item-label>Специалисты</q-item-label>
             <q-item-label caption>
-              Список специалистов на модерации
+              Список специалистов
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple :to="{ name: 'users.index' }">
+          <q-item-section avatar>
+            <q-icon name="person"/>
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Пользователи</q-item-label>
+            <q-item-label caption>
+              Список пользователей
             </q-item-label>
           </q-item-section>
         </q-item>
