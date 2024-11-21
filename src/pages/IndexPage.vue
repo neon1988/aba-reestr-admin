@@ -79,40 +79,6 @@
       </q-card-section>
     </q-card>
 
-    <!-- Статистика -->
-    <q-card class="q-mb-md">
-      <q-card-section>
-        <div class="text-h5 text-primary">Статистика</div>
-        <q-separator class="q-my-sm"/>
-        <div class="row text-center q-col-gutter-md">
-          <div class="col-12 col-md-4">
-            <q-statistics
-              title="Центры"
-              value="125"
-              icon="home_work"
-              color="blue"
-            />
-          </div>
-          <div class="col-12 col-md-4">
-            <q-statistics
-              title="Специалисты"
-              value="58"
-              icon="badge"
-              color="green"
-            />
-          </div>
-          <div class="col-12 col-md-4">
-            <q-statistics
-              title="Пользователи"
-              value="789"
-              icon="person"
-              color="purple"
-            />
-          </div>
-        </div>
-      </q-card-section>
-    </q-card>
-
   </q-page>
 </template>
 

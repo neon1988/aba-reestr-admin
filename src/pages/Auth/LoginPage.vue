@@ -1,5 +1,5 @@
 <template>
-  <div padding>
+  <q-page padding>
     <div class="q-mb-md" style="max-width: 400px; margin: 0 auto;">
       <q-card>
         <q-card-section>
@@ -49,7 +49,7 @@
         </q-card-section>
       </q-card>
     </div>
-  </div>
+  </q-page>
 </template>
 
 <script setup lang="ts">

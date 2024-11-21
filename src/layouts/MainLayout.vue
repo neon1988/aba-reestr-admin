@@ -116,7 +116,8 @@
              style="height: 150px">
         <div class="absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
-            <img :src="authStore.user.photo?.url || 'https://cdn.quasar.dev/img/boy-avatar.png'">
+            <img :src="authStore.user.photo?.url || 'https://cdn.quasar.dev/img/boy-avatar.png'"
+                 alt="">
           </q-avatar>
           <div class="text-weight-bold">{{ authStore.user.name }}</div>
           <div>@rstoenescu</div>
