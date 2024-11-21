@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page padding>
     <q-toolbar>
       <q-toolbar-title>Центры</q-toolbar-title>
     </q-toolbar>
@@ -8,13 +8,13 @@
     <q-card-section class="q-mb-md">
       <q-radio v-model="store.status" :val="StatusEnum.OnReview"
                label="На проверке"
-               @update:model-value="applyFilter" />
+               @update:model-value="applyFilter"/>
       <q-radio v-model="store.status" :val="StatusEnum.Accepted"
                label="Проверенные"
-               @update:model-value="applyFilter" />
+               @update:model-value="applyFilter"/>
       <q-radio v-model="store.status" :val="StatusEnum.Rejected"
                label="Отклоненные"
-               @update:model-value="applyFilter" />
+               @update:model-value="applyFilter"/>
     </q-card-section>
 
     <!-- Список специалистов -->
@@ -27,7 +27,7 @@
       >
         <!-- Секция с аватаром -->
         <q-item-section avatar>
-          <center-photo :center="center" size="4rem" />
+          <center-photo :center="center" size="4rem"/>
         </q-item-section>
 
         <!-- Секция с информацией -->
@@ -63,11 +63,10 @@
     </div>
 
     <!-- Показываем загрузку, пока данные загружаются -->
-    <div v-if="store.loading">
-      <q-inner-loading :showing="store.loading">
-        <q-spinner-gears size="5rem" color="primary" />
-      </q-inner-loading>
-    </div>
+    <q-inner-loading v-if="store.loading" :showing="store.loading">
+      <q-spinner-gears size="5rem" color="primary"/>
+    </q-inner-loading>
+
   </q-page>
 </template>
 

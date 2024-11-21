@@ -1,15 +1,10 @@
 <template>
-  <q-page class="q-pa-md">
-    <div v-if="loading">
-      <q-inner-loading :showing="loading">
-        <q-spinner-gears size="5rem" color="primary" />
-      </q-inner-loading>
-    </div>
+  <q-page padding>
 
-    <div v-else-if="center">
+    <div v-if="center">
       <!-- Заголовок -->
       <q-toolbar class="q-mb-md">
-        <q-btn flat icon="arrow_back" @click="goBack" class="q-mr-md" />
+        <q-btn flat icon="arrow_back" @click="goBack" class="q-mr-md"/>
         <q-toolbar-title>{{ center.name }} - Центр</q-toolbar-title>
       </q-toolbar>
 
@@ -74,8 +69,12 @@
         <q-card-section>
           <div class="text-h6">Дата создания и обновления</div>
           <q-separator class="q-my-sm"/>
-          <div><strong>Создано:</strong> {{ center?.created_at }}</div>
-          <div><strong>Обновлено:</strong> {{ center?.updated_at }}</div>
+          <div><strong>Создано:</strong>&nbsp;
+            <date-time :raw-date="center.created_at"/>
+          </div>
+          <div><strong>Обновлено:</strong>&nbsp;
+            <date-time :raw-date="center.updated_at"/>
+          </div>
         </q-card-section>
       </q-card>
 
@@ -102,6 +101,10 @@
         Центр не найден
       </q-banner>
     </div>
+
+    <q-inner-loading :showing="loading">
+      <q-spinner-gears size="5rem" color="primary"/>
+    </q-inner-loading>
   </q-page>
 </template>
 
@@ -113,6 +116,7 @@ import { useQuasar } from 'quasar';
 import type { Center } from 'src/models/Center';
 import { approveCenter, getCenterById, rejectCenter } from 'src/services/centers';
 import { StatusEnum } from 'src/enums/StatusEnums';
+import DateTime from 'components/DateTime.vue';
 
 // Определение пропсов
 const props = defineProps({

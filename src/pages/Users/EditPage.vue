@@ -1,20 +1,14 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page padding>
     <q-toolbar>
-      <q-btn flat icon="arrow_back" @click="router.go(-1)" />
+      <q-btn flat icon="arrow_back" @click="router.go(-1)"/>
       <q-toolbar-title>Редактировать профиль</q-toolbar-title>
     </q-toolbar>
 
-    <div v-if="loading">
-      <q-inner-loading :showing="loading">
-        <q-spinner-gears size="5rem" color="primary"/>
-      </q-inner-loading>
-    </div>
-
     <q-card-section v-if="user">
-      <q-avatar size="56px" class="q-mb-lg">
-        <img :src="user.photo?.url || 'https://cdn.quasar.dev/img/boy-avatar.png'">
-      </q-avatar>
+      <q-item-section avatar class="q-mb-lg">
+        <user-photo :user="user" size="5rem"/>
+      </q-item-section>
 
       <!-- Форма выбора изображения -->
       <q-file
@@ -29,7 +23,7 @@
       <!-- Предварительный просмотр изображения -->
       <div v-if="imagePreview" class="q-mb-md text-center">
         <q-avatar size="150px" class="q-mb-md">
-          <img :src="imagePreview" alt="Предварительный просмотр" />
+          <img :src="imagePreview" alt="Предварительный просмотр"/>
         </q-avatar>
       </div>
 
@@ -60,6 +54,10 @@
         />
       </q-form>
     </q-card-section>
+
+    <q-inner-loading :showing="loading">
+      <q-spinner-gears size="5rem" color="primary"/>
+    </q-inner-loading>
   </q-page>
 </template>
 
@@ -69,10 +67,11 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { getUserById, updateUser, updateUserPhoto } from 'src/services/users';
 import type { User } from 'src/models/User';
 import {
-  QFile, QBtn, QAvatar, useQuasar,
+  QAvatar, QBtn, QFile, useQuasar,
 } from 'quasar';
 import { useAuthStore } from 'stores/auth';
 import { useRouter } from 'vue-router';
+import UserPhoto from 'components/UserPhoto.vue';
 
 export default defineComponent({
   props: {
@@ -82,6 +81,7 @@ export default defineComponent({
     },
   },
   components: {
+    UserPhoto,
     QFile,
     QBtn,
     QAvatar,

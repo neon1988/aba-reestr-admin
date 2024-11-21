@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page padding>
     <q-toolbar>
       <q-toolbar-title>Пользователи</q-toolbar-title>
     </q-toolbar>
@@ -11,7 +11,7 @@
               :key="user.id" clickable>
         <!-- Секция с аватаром -->
         <q-item-section avatar>
-          <user-photo :user="user" size="4rem" />
+          <user-photo :user="user" size="3rem" />
         </q-item-section>
 
         <q-item-section>
@@ -41,11 +41,9 @@
     </div>
 
     <!-- Показываем загрузку, пока данные загружаются -->
-    <div v-if="store.loading">
-      <q-inner-loading :showing="store.loading">
-        <q-spinner-gears size="5rem" color="primary" />
-      </q-inner-loading>
-    </div>
+    <q-inner-loading :showing="store.loading">
+      <q-spinner-gears size="5rem" color="primary" />
+    </q-inner-loading>
 
   </q-page>
 </template>

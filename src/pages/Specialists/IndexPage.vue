@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page padding>
     <q-toolbar>
       <q-toolbar-title>Специалисты</q-toolbar-title>
     </q-toolbar>
@@ -63,11 +63,9 @@
     </div>
 
     <!-- Показываем загрузку, пока данные загружаются -->
-    <div v-if="store.loading">
-      <q-inner-loading :showing="store.loading">
-        <q-spinner-gears size="5rem" color="primary" />
-      </q-inner-loading>
-    </div>
+    <q-inner-loading :showing="store.loading">
+      <q-spinner-gears size="5rem" color="primary" />
+    </q-inner-loading>
   </q-page>
 </template>
 

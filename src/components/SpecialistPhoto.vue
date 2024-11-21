@@ -1,5 +1,5 @@
 <template>
-  <q-avatar :size="size" class="q-mb-sm">
+  <q-avatar :size="size">
     <img
       :src="avatarUrl"
          :alt="`${specialist.firstname || 'Пользователь'}'s avatar`"
@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 import type { Specialist } from 'src/models/Specialist';
 
 const props = defineProps({

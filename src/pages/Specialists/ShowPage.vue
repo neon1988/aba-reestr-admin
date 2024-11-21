@@ -1,17 +1,11 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page padding>
     <q-toolbar>
       <q-btn flat icon="arrow_back" @click="router.go(-1)" />
       <q-toolbar-title>Информация о специалисте</q-toolbar-title>
     </q-toolbar>
 
-    <div v-if="loading">
-      <q-inner-loading :showing="loading">
-        <q-spinner-gears size="5rem" color="primary" />
-      </q-inner-loading>
-    </div>
-
-    <div v-else-if="specialist" class="q-pa-md">
+    <div v-if="specialist" class="q-pa-md">
 
       <q-card bordered>
         <q-card-section avatar v-if="specialist.photo">
@@ -45,7 +39,10 @@
             На проверке
           </q-chip>
           <div class="q-mt-sm">Телефон: {{ specialist.phone }}</div>
-          <div class="q-mt-sm">Дата регистрации: {{ specialist.created_at }}</div>
+          <div class="q-mt-sm">
+            Дата регистрации:
+            <date-time :raw-date="specialist.created_at" />
+          </div>
         </q-card-section>
 
         <q-card-actions>
@@ -73,11 +70,15 @@
       </q-banner>
     </div>
 
+    <q-inner-loading :showing="loading">
+      <q-spinner-gears size="5rem" color="primary" />
+    </q-inner-loading>
+
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, defineProps } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 
@@ -85,6 +86,7 @@ import type { Specialist } from 'src/models/Specialist';
 import { approveSpecialist, getSpecialistById, rejectSpecialist } from 'src/services/specialists';
 import { StatusEnum } from 'src/enums/StatusEnums';
 import SpecialistPhoto from 'components/SpecialistPhoto.vue';
+import DateTime from 'components/DateTime.vue';
 
 // Определение пропсов
 const props = defineProps({

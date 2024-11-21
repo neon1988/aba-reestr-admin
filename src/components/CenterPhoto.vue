@@ -1,5 +1,5 @@
 <template>
-  <q-avatar :size="size" class="q-mb-sm">
+  <q-avatar :size="size">
     <img
       :src="avatarUrl" :alt="center.name"
       class="avatar-image" />
@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 import type { Center } from 'src/models/Center';
 
 const props = defineProps({

@@ -13,7 +13,7 @@
         />
 
         <q-toolbar-title>
-          ABA реестр Админка
+          ABA реестр - Админка
         </q-toolbar-title>
 
         <!-- Кнопка для переключения темного режима -->
@@ -26,15 +26,9 @@
           @click="toggleDarkMode"
         />
 
-        <q-avatar
-          v-if="authStore.user"
-          size="2rem"
-          class="q-ml-md cursor-pointer"
-          @click="toggleRightDrawer"
-        >
-          <img v-if="authStore.user.photo" :src="authStore.user.photo?.url || 'https://cdn.quasar.dev/img/boy-avatar.png'">
-          <q-icon v-else name="style" />
-        </q-avatar>
+        <user-photo v-if="authStore.user" :user="authStore.user" size="2rem"
+                    @click="toggleRightDrawer" class="q-ml-md cursor-pointer" />
+
       </q-toolbar>
     </q-header>
 
@@ -145,6 +139,7 @@ import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from 'stores/auth';
+import UserPhoto from 'components/UserPhoto.vue';
 
 const $q = useQuasar();
 const authStore = useAuthStore();

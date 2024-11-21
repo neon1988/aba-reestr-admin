@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div padding>
     <div class="q-mb-md" style="max-width: 400px; margin: 0 auto;">
       <q-card>
         <q-card-section>
