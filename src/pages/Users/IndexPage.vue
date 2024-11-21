@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useUsersStore } from 'src/stores/usersStore';
+import { useUsersStore } from 'stores/users-store';
 import UserPhoto from 'components/UserPhoto.vue';
 
 const router = useRouter();

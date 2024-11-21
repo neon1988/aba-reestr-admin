@@ -75,7 +75,7 @@
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Center } from 'src/models/Center';
-import { useCentersStore } from 'src/stores/centersStore';
+import { useCentersStore } from 'stores/centers-store';
 import { StatusEnum } from 'src/enums/StatusEnums';
 import CenterPhoto from 'components/CenterPhoto.vue';
 import { useStatsStore } from 'stores/stat-store';

@@ -74,7 +74,7 @@
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Specialist } from 'src/models/Specialist';
-import { useSpecialistsStore } from 'src/stores/specialistsStore';
+import { useSpecialistsStore } from 'stores/specialists-store';
 import { StatusEnum } from 'src/enums/StatusEnums';
 import SpecialistPhoto from 'components/SpecialistPhoto.vue';
 import { useStatsStore } from 'stores/stat-store';
