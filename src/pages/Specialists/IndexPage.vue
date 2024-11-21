@@ -101,6 +101,13 @@ const viewSpecialist = (specialist: Specialist) => {
 
 // Загружаем данные при монтировании компонента
 onMounted(() => {
+  if (store.specialists.length === 0) {
+    if (statStore.specialistsOnReviewCount > 0) {
+      store.status = StatusEnum.OnReview;
+    } else {
+      store.status = StatusEnum.Accepted;
+    }
+  }
   store.fetchSpecialists();
 });
 </script>

@@ -12,6 +12,7 @@ export const useSpecialistsStore = defineStore('specialists', {
     currentPage: 1,
     loading: false,
     status: StatusEnum.OnReview as StatusEnum,
+
   }),
   actions: {
     async fetchSpecialists() {

@@ -102,6 +102,14 @@ const viewCenter = (center: Center) => {
 
 // Загружаем данные при монтировании компонента
 onMounted(() => {
+  if (store.centers.length === 0) {
+    if (statStore.centersOnReviewCount > 0) {
+      store.status = StatusEnum.OnReview;
+    } else {
+      store.status = StatusEnum.Accepted;
+    }
+  }
+
   store.fetchCenters();
 });
 </script>

@@ -96,12 +96,6 @@
       </q-card-actions>
     </div>
 
-    <div v-else class="q-mt-md text-center">
-      <q-banner class="bg-negative">
-        Центр не найден
-      </q-banner>
-    </div>
-
     <q-inner-loading :showing="loading">
       <q-spinner-gears size="5rem" color="primary"/>
     </q-inner-loading>

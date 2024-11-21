@@ -27,7 +27,7 @@
       </q-banner>
     </div>
 
-    <div class="q-pa-lg flex flex-center">
+    <div v-if="store.meta.last_page > 1" class="q-pa-lg flex flex-center">
       <!-- Пагинация -->
       <q-pagination
         v-if="store.meta"
@@ -36,7 +36,7 @@
         :max="store.meta.last_page"
         :max-pages="7"
         boundary-numbers
-        @update:model-value="store.fetchUsers"
+        @update:model-value="handlePageChange"
       />
     </div>
 
@@ -56,6 +56,11 @@ import UserPhoto from 'components/UserPhoto.vue';
 
 const router = useRouter();
 const store = useUsersStore();
+
+const handlePageChange = (page: number) => {
+  store.currentPage = page; // Обновляем текущую страницу
+  store.fetchUsers(); // Передаем фильтры
+};
 
 // Загружаем данные при монтировании компонента
 onMounted(() => {

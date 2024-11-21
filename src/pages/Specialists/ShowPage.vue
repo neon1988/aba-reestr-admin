@@ -64,12 +64,6 @@
       </q-card>
     </div>
 
-    <div v-else class="q-mt-md text-center">
-      <q-banner class="bg-negative" rounded>
-        Специалист не найден
-      </q-banner>
-    </div>
-
     <q-inner-loading :showing="loading">
       <q-spinner-gears size="5rem" color="primary" />
     </q-inner-loading>
