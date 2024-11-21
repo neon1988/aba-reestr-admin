@@ -6,7 +6,8 @@
 
     <!-- Фильтр по статусу -->
     <q-card-section class="q-mb-md">
-      <q-radio v-model="store.status" :val="StatusEnum.OnReview"
+      <q-radio v-if="statStore.centersOnReviewCount > 0" v-model="store.status"
+               :val="StatusEnum.OnReview"
                label="На проверке"
                @update:model-value="applyFilter"/>
       <q-radio v-model="store.status" :val="StatusEnum.Accepted"
@@ -77,9 +78,11 @@ import type { Center } from 'src/models/Center';
 import { useCentersStore } from 'src/stores/centersStore';
 import { StatusEnum } from 'src/enums/StatusEnums';
 import CenterPhoto from 'components/CenterPhoto.vue';
+import { useStatsStore } from 'stores/stat-store';
 
 const router = useRouter();
 const store = useCentersStore();
+const statStore = useStatsStore();
 
 // Метод для обновления данных при смене фильтра
 const applyFilter = () => {

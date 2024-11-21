@@ -6,7 +6,8 @@
 
     <!-- Фильтр по статусу -->
     <q-card-section class="q-mb-md">
-      <q-radio v-model="store.status" :val="StatusEnum.OnReview"
+      <q-radio v-if="statStore.specialistsOnReviewCount > 0"  v-model="store.status"
+               :val="StatusEnum.OnReview"
                label="На проверке"
                @update:model-value="applyFilter" />
       <q-radio v-model="store.status" :val="StatusEnum.Accepted"
@@ -76,9 +77,11 @@ import type { Specialist } from 'src/models/Specialist';
 import { useSpecialistsStore } from 'src/stores/specialistsStore';
 import { StatusEnum } from 'src/enums/StatusEnums';
 import SpecialistPhoto from 'components/SpecialistPhoto.vue';
+import { useStatsStore } from 'stores/stat-store';
 
 const router = useRouter();
 const store = useSpecialistsStore();
+const statStore = useStatsStore();
 
 // Метод для обновления данных при смене фильтра
 const applyFilter = () => {

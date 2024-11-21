@@ -27,7 +27,7 @@
         />
 
         <user-photo v-if="authStore.user" :user="authStore.user" size="2rem"
-                    @click="toggleRightDrawer" class="q-ml-md cursor-pointer" />
+                    @click="toggleRightDrawer" class="q-ml-md cursor-pointer"/>
 
       </q-toolbar>
     </q-header>
@@ -54,6 +54,15 @@
               Список центров
             </q-item-label>
           </q-item-section>
+
+          <q-item-section v-if="statStore.centersOnReviewCount" side bottom>
+            <q-badge color="orange" :label="statStore.centersOnReviewCount" />
+          </q-item-section>
+
+          <q-item-section v-else side top>
+            <q-badge :label="statStore.centersCount" />
+          </q-item-section>
+
         </q-item>
 
         <q-item clickable v-ripple :to="{ name: 'specialists.index' }">
@@ -67,6 +76,15 @@
               Список специалистов
             </q-item-label>
           </q-item-section>
+
+          <q-item-section v-if="statStore.specialistsCount" side top>
+            <q-badge color="orange" :label="statStore.specialistsOnReviewCount" />
+          </q-item-section>
+
+          <q-item-section v-else side top>
+            <q-badge :label="statStore.specialistsCount" />
+          </q-item-section>
+
         </q-item>
 
         <q-item clickable v-ripple :to="{ name: 'users.index' }">
@@ -80,6 +98,10 @@
               Список пользователей
             </q-item-label>
           </q-item-section>
+
+          <q-item-section side top>
+            <q-badge :label="statStore.usersCount" />
+          </q-item-section>
         </q-item>
       </q-list>
     </q-drawer>
@@ -90,7 +112,8 @@
       side="right"
       show-if-above
       bordered>
-      <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+      <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png"
+             style="height: 150px">
         <div class="absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
             <img :src="authStore.user.photo?.url || 'https://cdn.quasar.dev/img/boy-avatar.png'">
@@ -109,7 +132,7 @@
             v-ripple
             :to="{ name: 'users.edit', params: { id: authStore.user.id } }">
             <q-item-section avatar>
-              <q-icon name="settings" />
+              <q-icon name="settings"/>
             </q-item-section>
             <q-item-section>
               <q-item-label>Настройки</q-item-label>
@@ -118,7 +141,7 @@
 
           <q-item clickable v-ripple @click="logoutHandler">
             <q-item-section avatar>
-              <q-icon name="logout" />
+              <q-icon name="logout"/>
             </q-item-section>
             <q-item-section>
               <q-item-label>Выйти</q-item-label>
@@ -135,15 +158,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from 'stores/auth';
 import UserPhoto from 'components/UserPhoto.vue';
+import { useStatsStore } from 'stores/stat-store';
 
 const $q = useQuasar();
 const authStore = useAuthStore();
 const router = useRouter();
+const statStore = useStatsStore();
 
 const leftDrawerOpen = ref(false);
 const rightDrawerOpen = ref(false);
@@ -167,4 +192,9 @@ const logoutHandler = async () => {
     router.push({ name: 'login' });
   }
 };
+
+// Загружаем данные при монтировании компонента
+onMounted(() => {
+  statStore.fetchStats();
+});
 </script>
