@@ -78,6 +78,11 @@
         </q-card-section>
       </q-card>
 
+      <div v-if="center.files" class="q-mt-sm">
+        Документы:
+        <files-list :files="center.files" />
+      </div>
+
       <q-card-actions>
         <!-- Кнопка для подтверждения -->
         <q-btn
@@ -111,6 +116,8 @@ import type { Center } from 'src/models/Center';
 import { approveCenter, getCenterById, rejectCenter } from 'src/services/centers';
 import { StatusEnum } from 'src/enums/StatusEnums';
 import DateTime from 'components/DateTime.vue';
+import { useStatsStore } from 'stores/stat-store';
+import FilesList from 'components/FilesList.vue';
 
 // Определение пропсов
 const props = defineProps({
@@ -122,6 +129,7 @@ const props = defineProps({
 
 const $q = useQuasar();
 const router = useRouter();
+const statStore = useStatsStore();
 
 // Состояние для загрузки и данных
 const loading = ref(false);
@@ -152,6 +160,7 @@ const approveCenterHandler = async () => {
       position: 'top',
       timeout: 3000,
     });
+    await statStore.fetchStats();
   } finally {
     loading.value = false;
   }
@@ -171,6 +180,7 @@ const rejectCenterHandler = async () => {
       position: 'top',
       timeout: 3000,
     });
+    await statStore.fetchStats();
   } finally {
     loading.value = false;
   }

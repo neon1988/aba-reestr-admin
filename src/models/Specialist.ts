@@ -1,5 +1,6 @@
 // src/models/Specialist.ts
 import type { Image } from 'src/models/Image';
+import type { File } from 'src/models/File';
 
 export interface Specialist {
   id: number;
@@ -22,4 +23,5 @@ export interface Specialist {
   updated_at: string;
   deleted_at?: string;
   photo?: Image;
+  files?: File[];
 }

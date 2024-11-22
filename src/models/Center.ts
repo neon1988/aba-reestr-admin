@@ -1,5 +1,6 @@
 // src/models/Center.ts
 import type { Image } from 'src/models/Image';
+import type { File } from 'src/models/File';
 
 export interface Center {
   id: number;
@@ -22,4 +23,5 @@ export interface Center {
   updated_at: string;
   deleted_at: string | null;
   photo?: Image;
+  files?: File[];
 }

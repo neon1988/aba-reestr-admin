@@ -43,6 +43,10 @@
             Дата регистрации:
             <date-time :raw-date="specialist.created_at" />
           </div>
+          <div v-if="specialist.files" class="q-mt-sm">
+            Документы:
+            <files-list :files="specialist.files" />
+          </div>
         </q-card-section>
 
         <q-card-actions>
@@ -81,6 +85,8 @@ import { approveSpecialist, getSpecialistById, rejectSpecialist } from 'src/serv
 import { StatusEnum } from 'src/enums/StatusEnums';
 import SpecialistPhoto from 'components/SpecialistPhoto.vue';
 import DateTime from 'components/DateTime.vue';
+import { useStatsStore } from 'stores/stat-store';
+import FilesList from 'components/FilesList.vue';
 
 // Определение пропсов
 const props = defineProps({
@@ -92,6 +98,7 @@ const props = defineProps({
 
 const $q = useQuasar();
 const router = useRouter();
+const statStore = useStatsStore();
 
 // Состояние для загрузки и данных
 const loading = ref(false);
@@ -122,6 +129,7 @@ const approveSpecialistHandler = async () => {
       position: 'top',
       timeout: 3000,
     });
+    await statStore.fetchStats();
   } finally {
     loading.value = false;
   }
@@ -141,6 +149,7 @@ const rejectSpecialistHandler = async () => {
       position: 'top',
       timeout: 3000,
     });
+    await statStore.fetchStats();
   } finally {
     loading.value = false;
   }
