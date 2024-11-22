@@ -2,15 +2,17 @@
 import axios from 'axios';
 import { Notify } from 'quasar';
 
+const apiUrl = process.env.VUE_APP_API_URL;
+
 const api = axios.create({
-  baseURL: 'http://localhost/api', // базовый URL вашего API
+  baseURL: apiUrl || '', // базовый URL вашего API
   timeout: 10000, // Таймаут для запросов
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Добавляем интерсепторы (например, токен авторизации)
+// Добавляем интерцепторы (например, токен авторизации)
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
