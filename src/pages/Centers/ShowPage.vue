@@ -9,11 +9,13 @@
       </q-toolbar>
 
       <!-- Фотография центра -->
-      <div v-if="center.photo" class="q-mb-md text-center">
-        <q-img :src="center.photo?.url" alt="Фото центра"
-               class="q-mb-md"
-               style="border-radius: 8px; max-height: 250px; object-fit: cover;"/>
-      </div>
+      <center-photo
+        :center="center"
+        size="14rem"
+        :fullscreen="true"
+        alt="Фото центра"
+        class="q-mb-md cursor-pointer"
+      />
 
       <!-- Информация о центре -->
       <q-card class="q-mb-md" bordered>
@@ -118,6 +120,7 @@ import { StatusEnum } from 'src/enums/StatusEnums';
 import DateTime from 'components/DateTime.vue';
 import { useStatsStore } from 'stores/stat-store';
 import FilesList from 'components/FilesList.vue';
+import CenterPhoto from 'components/CenterPhoto.vue';
 
 // Определение пропсов
 const props = defineProps({

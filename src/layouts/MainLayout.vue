@@ -26,8 +26,14 @@
           @click="toggleDarkMode"
         />
 
-        <user-photo v-if="authStore.user" :user="authStore.user" size="2rem"
-                    @click="toggleRightDrawer" class="q-ml-md cursor-pointer"/>
+        <user-photo
+          v-if="authStore.user"
+          :user="authStore.user"
+          :fullscreen="false"
+          size="2rem"
+          @click="toggleRightDrawer"
+          class="q-ml-md cursor-pointer"
+        />
 
       </q-toolbar>
     </q-header>
@@ -55,12 +61,12 @@
             </q-item-label>
           </q-item-section>
 
-          <q-item-section v-if="statStore.centersOnReviewCount" side bottom>
-            <q-badge color="orange" :label="statStore.centersOnReviewCount" />
+          <q-item-section v-if="statStore.centersOnReviewCount > 0" side bottom>
+            <q-badge color="orange" :label="statStore.centersOnReviewCount"/>
           </q-item-section>
 
           <q-item-section v-else side top>
-            <q-badge :label="statStore.centersCount" />
+            <q-badge :label="statStore.centersCount"/>
           </q-item-section>
 
         </q-item>
@@ -77,12 +83,12 @@
             </q-item-label>
           </q-item-section>
 
-          <q-item-section v-if="statStore.specialistsCount" side top>
-            <q-badge color="orange" :label="statStore.specialistsOnReviewCount" />
+          <q-item-section v-if="statStore.specialistsOnReviewCount > 0" side top>
+            <q-badge color="orange" :label="statStore.specialistsOnReviewCount"/>
           </q-item-section>
 
           <q-item-section v-else side top>
-            <q-badge :label="statStore.specialistsCount" />
+            <q-badge :label="statStore.specialistsCount"/>
           </q-item-section>
 
         </q-item>
@@ -100,7 +106,7 @@
           </q-item-section>
 
           <q-item-section side top>
-            <q-badge :label="statStore.usersCount" />
+            <q-badge :label="statStore.usersCount"/>
           </q-item-section>
         </q-item>
       </q-list>
@@ -115,10 +121,13 @@
       <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png"
              style="height: 150px">
         <div class="absolute-bottom bg-transparent">
-          <q-avatar size="56px" class="q-mb-sm">
-            <img :src="authStore.user.photo?.url || 'https://cdn.quasar.dev/img/boy-avatar.png'"
-                 alt="">
-          </q-avatar>
+          <user-photo
+            v-if="authStore.user"
+            :user="authStore.user"
+            :fullscreen="true"
+            size="3.5rem"
+            class="q-mb-sm cursor-pointer"
+          />
           <div class="text-weight-bold">{{ authStore.user.name }}</div>
           <div>@rstoenescu</div>
         </div>
@@ -159,7 +168,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from 'stores/auth';

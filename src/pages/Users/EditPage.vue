@@ -7,7 +7,12 @@
 
     <q-card-section v-if="user">
       <q-item-section avatar class="q-mb-lg">
-        <user-photo :user="user" size="5rem"/>
+        <user-photo
+          :user="user"
+          :fullscreen="true"
+          size="5rem"
+          class="cursor-pointer"
+        />
       </q-item-section>
 
       <!-- Форма выбора изображения -->

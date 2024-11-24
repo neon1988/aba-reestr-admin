@@ -28,7 +28,7 @@
       >
         <!-- Секция с аватаром -->
         <q-item-section avatar>
-          <specialist-photo :specialist="specialist" size="4rem" />
+          <specialist-photo :specialist="specialist" size="4rem" :fullscreen="false" />
         </q-item-section>
 
         <!-- Секция с информацией -->

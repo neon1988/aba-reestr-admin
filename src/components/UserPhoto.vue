@@ -1,20 +1,37 @@
 <template>
-  <q-avatar :size="size" :color="avatarColor" text-color="white">
-    <!-- Если аватар есть, показываем его -->
+  <q-avatar
+    :size="size"
+    :color="avatarColor"
+    text-color="white"
+    @click="url && (showFullscreen = true)">
+    <!-- Аватар или заглушка -->
     <img
-      v-if="avatarUrl !== ''"
-      :src="avatarUrl"
+      v-if="url"
+      :src="url"
       :alt="`${user.name || 'Пользователь'}'s avatar`"
       class="avatar-image"
     />
-    <!-- Если аватара нет, показываем заглушку с инициалами -->
     <span v-else>{{ initials }}</span>
+
+    <!-- Полноэкранное изображение -->
+    <image-fullscreen v-if="fullscreen && url" v-model:show="showFullscreen">
+      <q-img
+        :src="url"
+        spinner-color="primary"
+        spinner-size="82px"
+        width="100%"
+        height="100%"
+        fit="scale-down">
+      </q-img>
+    </image-fullscreen>
   </q-avatar>
+
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import type { User } from 'src/models/User';
+import ImageFullscreen from 'components/ImageFullscreen.vue';
 
 // Пропсы
 const props = defineProps({
@@ -26,22 +43,27 @@ const props = defineProps({
     type: String,
     default: '3rem',
   },
+  fullscreen: {
+    type: Boolean,
+    default: false,
+  },
 });
 
+const showFullscreen = ref<boolean>(false);
+
 // Аватар пользователя
-const avatarUrl = computed(() => props.user.photo?.url || '');
+const url = ref<string | null>(props.user.photo?.url || null);
 
 // Генерация инициалов
 const initials = computed(() => {
-  if (!props.user.name) return 'U'; // Заглушка по умолчанию
+  if (!props.user.name) return 'U';
   const nameParts = props.user.name.split(' ');
-  return nameParts
-    .slice(0, 2) // Берем только первые два слова
-    .map((part) => part.charAt(0).toUpperCase()) // Берем первую букву каждого
-    .join(''); // Объединяем их
+  return nameParts.slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join('');
 });
 
-// Цвет для аватара-заглушки
+// Цвет аватара
 const avatarColor = computed(() => {
   const colors = ['blue', 'green', 'red', 'purple', 'orange', 'teal'];
   const nameHash = Array.from(props.user.name || 'U').reduce(

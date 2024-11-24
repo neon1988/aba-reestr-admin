@@ -1,14 +1,30 @@
 <template>
-  <q-avatar :size="size">
+  <q-avatar :size="size" rounded @click="url && (showFullscreen = true)">
     <img
-      :src="avatarUrl" :alt="center.name"
-      class="avatar-image" />
+      v-if="url"
+      :src="url"
+      :alt="center.name"
+      class="avatar-image"
+    />
+
+    <!-- Полноэкранное изображение -->
+    <image-fullscreen v-if="fullscreen && url" v-model:show="showFullscreen">
+      <q-img
+        :src="url"
+        spinner-color="primary"
+        spinner-size="82px"
+        width="100%"
+        height="100%"
+        fit="scale-down">
+      </q-img>
+    </image-fullscreen>
   </q-avatar>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref } from 'vue';
 import type { Center } from 'src/models/Center';
+import ImageFullscreen from 'components/ImageFullscreen.vue';
 
 const props = defineProps({
   center: {
@@ -19,11 +35,14 @@ const props = defineProps({
     type: String,
     default: '3rem',
   },
+  fullscreen: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const defaultAvatar = 'https://cdn.quasar.dev/img/boy-avatar.png';
-
-const avatarUrl = computed(() => props.center.photo?.url || defaultAvatar);
+const showFullscreen = ref<boolean>(false);
+const url = ref<string | null>(props.center.photo?.url || null);
 </script>
 
 <style scoped>

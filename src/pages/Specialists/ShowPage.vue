@@ -9,7 +9,12 @@
 
       <q-card bordered>
         <q-card-section avatar v-if="specialist.photo">
-          <specialist-photo :specialist="specialist" size="10rem" />
+          <specialist-photo
+            :specialist="specialist"
+            :fullscreen="true"
+            size="10rem"
+            class="cursor-pointer"
+          />
         </q-card-section>
 
         <q-card-section>
