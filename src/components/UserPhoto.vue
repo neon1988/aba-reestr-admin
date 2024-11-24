@@ -89,12 +89,15 @@ const avatarColor = computed(() => {
 const computedImageUrl = computed(() => {
   if (!url.value) return '';
 
-  const urlObj = new URL(url.value);
-  if (props.width) urlObj.searchParams.set('w', props.width.toString());
-  if (props.height) urlObj.searchParams.set('h', props.height.toString());
-  if (props.quality) urlObj.searchParams.set('q', props.quality.toString());
+  try {
+    const urlObj = new URL(url.value);
+    if (props.width) urlObj.searchParams.set('w', props.width.toString());
+    if (props.height) urlObj.searchParams.set('h', props.height.toString());
+    if (props.quality) urlObj.searchParams.set('q', props.quality.toString());
+    return urlObj.toString();
+  } catch (e) { /* empty */ }
 
-  return urlObj.toString();
+  return url.value;
 });
 
 </script>
