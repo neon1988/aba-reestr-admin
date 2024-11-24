@@ -7,7 +7,7 @@
     <!-- Аватар или заглушка -->
     <img
       v-if="url"
-      :src="url"
+      :src="computedImageUrl"
       :alt="`${user.name || 'Пользователь'}'s avatar`"
       class="avatar-image"
     />
@@ -47,6 +47,18 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  width: {
+    type: Number || null,
+    default: null,
+  },
+  height: {
+    type: Number || null,
+    default: null,
+  },
+  quality: {
+    type: Number || null,
+    default: null,
+  },
 });
 
 const showFullscreen = ref<boolean>(false);
@@ -72,6 +84,19 @@ const avatarColor = computed(() => {
   );
   return colors[nameHash % colors.length];
 });
+
+// Функция для добавления параметров w, h и q в URL изображения
+const computedImageUrl = computed(() => {
+  if (!url.value) return '';
+
+  const urlObj = new URL(url.value);
+  if (props.width) urlObj.searchParams.set('w', props.width.toString());
+  if (props.height) urlObj.searchParams.set('h', props.height.toString());
+  if (props.quality) urlObj.searchParams.set('q', props.quality.toString());
+
+  return urlObj.toString();
+});
+
 </script>
 
 <style scoped>

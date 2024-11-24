@@ -1,17 +1,19 @@
 <template>
-  <q-page padding>
+  <q-page v-if="user" padding>
     <q-toolbar>
       <q-btn flat icon="arrow_back" @click="router.go(-1)"/>
       <q-toolbar-title>Редактировать профиль</q-toolbar-title>
     </q-toolbar>
 
-    <q-card-section v-if="user">
+    <q-card-section>
       <q-item-section avatar class="q-mb-lg">
         <user-photo
           :user="user"
           :fullscreen="true"
           size="5rem"
           class="cursor-pointer"
+          :width="100"
+          :height="100"
         />
       </q-item-section>
 

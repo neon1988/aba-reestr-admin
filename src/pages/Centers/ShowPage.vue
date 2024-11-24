@@ -1,107 +1,107 @@
 <template>
-  <q-page padding>
+  <q-page v-if="center" padding>
 
-    <div v-if="center">
-      <!-- Заголовок -->
-      <q-toolbar class="q-mb-md">
-        <q-btn flat icon="arrow_back" @click="goBack" class="q-mr-md"/>
-        <q-toolbar-title>{{ center.name }} - Центр</q-toolbar-title>
-      </q-toolbar>
+    <!-- Заголовок -->
+    <q-toolbar class="q-mb-md">
+      <q-btn flat icon="arrow_back" @click="goBack" class="q-mr-md"/>
+      <q-toolbar-title>{{ center.name }} - Центр</q-toolbar-title>
+    </q-toolbar>
 
-      <!-- Фотография центра -->
-      <center-photo
-        :center="center"
-        size="14rem"
-        :fullscreen="true"
-        alt="Фото центра"
-        class="q-mb-md cursor-pointer"
-      />
+    <!-- Фотография центра -->
+    <center-photo
+      :center="center"
+      size="14rem"
+      :fullscreen="true"
+      alt="Фото центра"
+      class="q-mb-md cursor-pointer"
+      :width="224"
+      :height="224"
+    />
 
-      <!-- Информация о центре -->
-      <q-card class="q-mb-md" bordered>
-        <q-card-section>
-          <q-chip
-            v-if="center.status === StatusEnum.Accepted"
-            color="green"
-            text-color="white"
-            icon="check"
-          >
-            Подтверждён
-          </q-chip>
-          <q-chip
-            v-else-if="center.status === StatusEnum.Rejected"
-            color="red"
-            text-color="white"
-            icon="block"
-          >
-            Отклонён
-          </q-chip>
-          <q-chip
-            v-else-if="center.status === StatusEnum.OnReview"
-            color="orange"
-            text-color="white"
-            icon="hourglass_empty"
-          >
-            На проверке
-          </q-chip>
-          <div class="text-h6">Основная информация</div>
-          <q-separator class="q-my-sm"/>
-          <div><strong>Юридическое название:</strong> {{ center.legal_name }}</div>
-          <div><strong>ИНН:</strong> {{ center.inn }}</div>
-          <div v-if="center.kpp"><strong>КПП:</strong> {{ center.kpp }}</div>
-          <div><strong>Страна:</strong> {{ center.country }}</div>
-          <div v-if="center.region"><strong>Регион:</strong> {{ center.region }}</div>
-          <div><strong>Город:</strong> {{ center.city }}</div>
-        </q-card-section>
-      </q-card>
-
-      <!-- Контактные данные -->
-      <q-card class="q-mb-md" bordered>
-        <q-card-section>
-          <div class="text-h6">Контактная информация</div>
-          <q-separator class="q-my-sm"/>
-          <div><strong>Телефон:</strong> {{ center.phone }}</div>
-          <div v-if="center.services"><strong>Услуги:</strong> {{ center.services }}</div>
-          <div v-if="center.intensives"><strong>Интенсивы:</strong> {{ center.intensives }}</div>
-        </q-card-section>
-      </q-card>
-
-      <!-- Дата создания и обновления -->
-      <q-card class="q-mb-md" bordered>
-        <q-card-section>
-          <div class="text-h6">Дата создания и обновления</div>
-          <q-separator class="q-my-sm"/>
-          <div><strong>Создано:</strong>&nbsp;
-            <date-time :raw-date="center.created_at"/>
-          </div>
-          <div><strong>Обновлено:</strong>&nbsp;
-            <date-time :raw-date="center.updated_at"/>
-          </div>
-        </q-card-section>
-      </q-card>
-
-      <div v-if="center.files" class="q-mt-sm">
-        Документы:
-        <files-list :files="center.files" />
-      </div>
-
-      <q-card-actions>
-        <!-- Кнопка для подтверждения -->
-        <q-btn
-          label="Подтвердить"
+    <!-- Информация о центре -->
+    <q-card class="q-mb-md" bordered>
+      <q-card-section>
+        <q-chip
+          v-if="center.status === StatusEnum.Accepted"
           color="green"
-          @click="approveCenterHandler"
-          v-if="center.status != StatusEnum.Accepted && !loading"
-        />
-        <!-- Кнопка для отклонения -->
-        <q-btn
-          v-if="center.status != StatusEnum.Rejected && !loading"
-          label="Отклонить"
+          text-color="white"
+          icon="check"
+        >
+          Подтверждён
+        </q-chip>
+        <q-chip
+          v-else-if="center.status === StatusEnum.Rejected"
           color="red"
-          @click="rejectCenterHandler"
-        />
-      </q-card-actions>
+          text-color="white"
+          icon="block"
+        >
+          Отклонён
+        </q-chip>
+        <q-chip
+          v-else-if="center.status === StatusEnum.OnReview"
+          color="orange"
+          text-color="white"
+          icon="hourglass_empty"
+        >
+          На проверке
+        </q-chip>
+        <div class="text-h6">Основная информация</div>
+        <q-separator class="q-my-sm"/>
+        <div><strong>Юридическое название:</strong> {{ center.legal_name }}</div>
+        <div><strong>ИНН:</strong> {{ center.inn }}</div>
+        <div v-if="center.kpp"><strong>КПП:</strong> {{ center.kpp }}</div>
+        <div><strong>Страна:</strong> {{ center.country }}</div>
+        <div v-if="center.region"><strong>Регион:</strong> {{ center.region }}</div>
+        <div><strong>Город:</strong> {{ center.city }}</div>
+      </q-card-section>
+    </q-card>
+
+    <!-- Контактные данные -->
+    <q-card class="q-mb-md" bordered>
+      <q-card-section>
+        <div class="text-h6">Контактная информация</div>
+        <q-separator class="q-my-sm"/>
+        <div><strong>Телефон:</strong> {{ center.phone }}</div>
+        <div v-if="center.services"><strong>Услуги:</strong> {{ center.services }}</div>
+        <div v-if="center.intensives"><strong>Интенсивы:</strong> {{ center.intensives }}</div>
+      </q-card-section>
+    </q-card>
+
+    <!-- Дата создания и обновления -->
+    <q-card class="q-mb-md" bordered>
+      <q-card-section>
+        <div class="text-h6">Дата создания и обновления</div>
+        <q-separator class="q-my-sm"/>
+        <div><strong>Создано:</strong>&nbsp;
+          <date-time :raw-date="center.created_at"/>
+        </div>
+        <div><strong>Обновлено:</strong>&nbsp;
+          <date-time :raw-date="center.updated_at"/>
+        </div>
+      </q-card-section>
+    </q-card>
+
+    <div v-if="center.files" class="q-mt-sm">
+      Документы:
+      <files-list :files="center.files"/>
     </div>
+
+    <q-card-actions>
+      <!-- Кнопка для подтверждения -->
+      <q-btn
+        label="Подтвердить"
+        color="green"
+        @click="approveCenterHandler"
+        v-if="center.status != StatusEnum.Accepted && !loading"
+      />
+      <!-- Кнопка для отклонения -->
+      <q-btn
+        v-if="center.status != StatusEnum.Rejected && !loading"
+        label="Отклонить"
+        color="red"
+        @click="rejectCenterHandler"
+      />
+    </q-card-actions>
 
     <q-inner-loading :showing="loading">
       <q-spinner-gears size="5rem" color="primary"/>

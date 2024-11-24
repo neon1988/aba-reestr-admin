@@ -1,21 +1,20 @@
 <template>
-  <q-page padding>
+  <q-page v-if="specialist" padding>
     <q-toolbar>
       <q-btn flat icon="arrow_back" @click="router.go(-1)" />
       <q-toolbar-title>Информация о специалисте</q-toolbar-title>
     </q-toolbar>
 
-    <div v-if="specialist" class="q-pa-md">
+      <specialist-photo
+        :specialist="specialist"
+        :fullscreen="true"
+        size="14rem"
+        :width="224"
+        :height="224"
+        class="q-mb-md cursor-pointer"
+      />
 
       <q-card bordered>
-        <q-card-section avatar v-if="specialist.photo">
-          <specialist-photo
-            :specialist="specialist"
-            :fullscreen="true"
-            size="10rem"
-            class="cursor-pointer"
-          />
-        </q-card-section>
 
         <q-card-section>
           <div class="text-h6">{{ specialist.firstname }} {{ specialist.lastname }}</div>
@@ -71,7 +70,6 @@
           />
         </q-card-actions>
       </q-card>
-    </div>
 
     <q-inner-loading :showing="loading">
       <q-spinner-gears size="5rem" color="primary" />

@@ -11,7 +11,12 @@
               :key="user.id" clickable>
         <!-- Секция с аватаром -->
         <q-item-section avatar>
-          <user-photo :user="user" size="3rem" />
+          <user-photo
+            :user="user"
+            size="3rem"
+            :width="48"
+            :height="48"
+          />
         </q-item-section>
 
         <q-item-section>

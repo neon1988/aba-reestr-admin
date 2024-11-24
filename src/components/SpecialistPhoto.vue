@@ -1,7 +1,7 @@
 <template>
   <q-avatar :size="size" @click="url && (showFullscreen = true)">
     <img v-if="url"
-      :src="url"
+      :src="computedImageUrl"
          :alt="`${specialist.firstname || 'Пользователь'}'s avatar`"
       class="avatar-image" />
 
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import type { Specialist } from 'src/models/Specialist';
 import ImageFullscreen from 'components/ImageFullscreen.vue';
 
@@ -37,11 +37,36 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  width: {
+    type: Number || null,
+    default: null,
+  },
+  height: {
+    type: Number || null,
+    default: null,
+  },
+  quality: {
+    type: Number || null,
+    default: null,
+  },
 });
 
 const showFullscreen = ref<boolean>(false);
 
 const url = ref<string | null>(props.specialist.photo?.url || null);
+
+// Функция для добавления параметров w, h и q в URL изображения
+const computedImageUrl = computed(() => {
+  if (!url.value) return '';
+
+  const urlObj = new URL(url.value);
+  if (props.width) urlObj.searchParams.set('w', props.width.toString());
+  if (props.height) urlObj.searchParams.set('h', props.height.toString());
+  if (props.quality) urlObj.searchParams.set('q', props.quality.toString());
+
+  return urlObj.toString();
+});
+
 </script>
 
 <style scoped>

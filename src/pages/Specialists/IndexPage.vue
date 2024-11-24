@@ -6,16 +6,16 @@
 
     <!-- Фильтр по статусу -->
     <q-card-section class="q-mb-md">
-      <q-radio v-if="statStore.specialistsOnReviewCount > 0"  v-model="store.status"
+      <q-radio v-if="statStore.specialistsOnReviewCount > 0" v-model="store.status"
                :val="StatusEnum.OnReview"
                label="На проверке"
-               @update:model-value="applyFilter" />
+               @update:model-value="applyFilter"/>
       <q-radio v-model="store.status" :val="StatusEnum.Accepted"
                label="Проверенные"
-               @update:model-value="applyFilter" />
+               @update:model-value="applyFilter"/>
       <q-radio v-model="store.status" :val="StatusEnum.Rejected"
                label="Отклоненные"
-               @update:model-value="applyFilter" />
+               @update:model-value="applyFilter"/>
     </q-card-section>
 
     <!-- Список специалистов -->
@@ -28,7 +28,13 @@
       >
         <!-- Секция с аватаром -->
         <q-item-section avatar>
-          <specialist-photo :specialist="specialist" size="4rem" :fullscreen="false" />
+          <specialist-photo
+            :specialist="specialist"
+            size="4rem"
+            :fullscreen="false"
+            :width="64"
+            :height="64"
+          />
         </q-item-section>
 
         <!-- Секция с информацией -->
@@ -65,7 +71,7 @@
 
     <!-- Показываем загрузку, пока данные загружаются -->
     <q-inner-loading :showing="store.loading">
-      <q-spinner-gears size="5rem" color="primary" />
+      <q-spinner-gears size="5rem" color="primary"/>
     </q-inner-loading>
   </q-page>
 </template>

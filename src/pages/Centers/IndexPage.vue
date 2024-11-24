@@ -28,7 +28,13 @@
       >
         <!-- Секция с аватаром -->
         <q-item-section avatar>
-          <center-photo :center="center" size="4rem" :fullscreen="false" />
+          <center-photo
+            :center="center"
+            size="4rem"
+            :fullscreen="false"
+            :width="64"
+            :height="64"
+          />
         </q-item-section>
 
         <!-- Секция с информацией -->

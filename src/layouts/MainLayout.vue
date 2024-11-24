@@ -33,6 +33,8 @@
           size="2rem"
           @click="toggleRightDrawer"
           class="q-ml-md cursor-pointer"
+          :width="32"
+          :height="32"
         />
 
       </q-toolbar>
@@ -127,6 +129,8 @@
             :fullscreen="true"
             size="3.5rem"
             class="q-mb-sm cursor-pointer"
+            :width="56"
+            :height="56"
           />
           <div class="text-weight-bold">{{ authStore.user.name }}</div>
           <div>@rstoenescu</div>
