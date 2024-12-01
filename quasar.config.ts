@@ -6,7 +6,10 @@
 /* eslint func-names: 0 */
 /* eslint global-require: 0 */
 
+import dotenv from 'dotenv';
 import { defineConfig } from '#q-app/wrappers';
+
+dotenv.config({ path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env' });
 
 export default defineConfig((/* ctx */) => ({
   // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
@@ -61,7 +64,7 @@ export default defineConfig((/* ctx */) => ({
 
     // publicPath: '/',
     // analyze: true,
-    // env: {},
+    env: process.env,
     // rawDefine: {}
     // ignorePublicFolder: true,
     // minify: false,

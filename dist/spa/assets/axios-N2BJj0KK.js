@@ -1,0 +1,1 @@
+import{d as e,a as o}from"./index-BWeAa12D.js";const i=o.create({baseURL:"https://aba-expert.ru/api"}),t=e(({app:a})=>{a.config.globalProperties.$axios=o,a.config.globalProperties.$api=i});export{i as api,t as default};
