@@ -1,0 +1,1 @@
+import{a7 as t}from"./index-DjZidwi3.js";const r=(s=1)=>t.get(`/users?page=${s}`),p=s=>t.get(`/users/${s}`),n=(s,e)=>t.patch(`/users/${s}`,e),u=(s,e)=>{const a=new FormData;return a.append("photo",e),t.post(`/users/${s}/photos`,a,{headers:{"Content-Type":"multipart/form-data"}})};export{p as a,n as b,r as g,u};
