@@ -111,6 +111,28 @@
             <q-badge :label="statStore.usersCount"/>
           </q-item-section>
         </q-item>
+
+        <q-item clickable v-ripple :to="{ name: 'bulletins.index' }">
+          <q-item-section avatar>
+            <q-icon name="badge"/>
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Объявления</q-item-label>
+            <q-item-label caption>
+              Список объявлений
+            </q-item-label>
+          </q-item-section>
+
+          <q-item-section v-if="statStore.bulletinsOnReviewCount > 0" side top>
+            <q-badge color="orange" :label="statStore.bulletinsOnReviewCount"/>
+          </q-item-section>
+
+          <q-item-section v-else side top>
+            <q-badge :label="statStore.bulletinsCount"/>
+          </q-item-section>
+
+        </q-item>
       </q-list>
     </q-drawer>
 

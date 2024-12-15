@@ -9,6 +9,8 @@ export const useStatsStore = defineStore('stats', {
     centersCount: 0,
     centersOnReviewCount: 0,
     usersCount: 0,
+    bulletinsOnReviewCount: 0,
+    bulletinsCount: 0,
   }),
   actions: {
     async fetchStats() {
@@ -20,6 +22,8 @@ export const useStatsStore = defineStore('stats', {
       this.centersCount = data.centersCount;
       this.centersOnReviewCount = data.centersOnReviewCount;
       this.usersCount = data.usersCount;
+      this.bulletinsOnReviewCount = data.bulletinsOnReviewCount;
+      this.bulletinsCount = data.bulletinsCount;
     },
   },
 });

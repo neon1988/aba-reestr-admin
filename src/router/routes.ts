@@ -27,6 +27,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'users/:id/edit', name: 'users.edit', component: () => import('pages/Users/EditPage.vue'), meta: { requiresAuth: true }, props: (route) => ({ id: Number(route.params.id) }),
       },
+      {
+        path: 'bulletins', name: 'bulletins.index', component: () => import('pages/Bulletins/IndexPage.vue'), meta: { requiresAuth: true },
+      },
+      {
+        path: 'bulletins/:id', name: 'bulletins.show', component: () => import('pages/Bulletins/ShowPage.vue'), meta: { requiresAuth: true }, props: true,
+      },
     ],
   },
 
