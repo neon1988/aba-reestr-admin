@@ -33,6 +33,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'bulletins/:id', name: 'bulletins.show', component: () => import('pages/Bulletins/ShowPage.vue'), meta: { requiresAuth: true }, props: true,
       },
+      {
+        path: 'webinars', name: 'webinars.index', component: () => import('pages/Webinars/IndexPage.vue'), meta: { requiresAuth: true },
+      },
+      {
+        path: 'webinars.create', name: 'webinars.create', component: () => import('pages/Webinars/CreatePage.vue'), meta: { requiresAuth: true },
+      },
     ],
   },
 

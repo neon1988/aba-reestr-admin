@@ -114,24 +114,65 @@
 
         <q-item clickable v-ripple :to="{ name: 'bulletins.index' }">
           <q-item-section avatar>
-            <q-icon name="badge"/>
+            <q-icon name="newspaper"/>
           </q-item-section>
-
           <q-item-section>
             <q-item-label>Объявления</q-item-label>
             <q-item-label caption>
               Список объявлений
             </q-item-label>
           </q-item-section>
-
           <q-item-section v-if="statStore.bulletinsOnReviewCount > 0" side top>
             <q-badge color="orange" :label="statStore.bulletinsOnReviewCount"/>
           </q-item-section>
-
           <q-item-section v-else side top>
             <q-badge :label="statStore.bulletinsCount"/>
           </q-item-section>
+        </q-item>
 
+        <q-item clickable v-ripple :to="{ name: 'webinars.index' }">
+          <q-item-section avatar>
+            <q-icon name="videocam" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Вебинары</q-item-label>
+            <q-item-label caption>
+              Список вебинаров
+            </q-item-label>
+          </q-item-section>
+          <q-item-section side top>
+            <q-badge :label="statStore.webinarsCount" />
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple :to="{ name: 'worksheets.index' }">
+          <q-item-section avatar>
+            <q-icon name="library_books" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Библиотека</q-item-label>
+            <q-item-label caption>
+              Список материалов
+            </q-item-label>
+          </q-item-section>
+          <q-item-section side top>
+            <q-badge :label="statStore.worksheetsCount" />
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple :to="{ name: 'conferences.index' }">
+          <q-item-section avatar>
+            <q-icon name="event" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Мероприятия</q-item-label>
+            <q-item-label caption>
+              Список конференций
+            </q-item-label>
+          </q-item-section>
+          <q-item-section side top>
+            <q-badge :label="statStore.conferencesCount" />
+          </q-item-section>
         </q-item>
       </q-list>
     </q-drawer>
@@ -198,13 +239,15 @@ import { onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from 'stores/auth';
-import UserPhoto from 'components/UserPhoto.vue';
 import { useStatsStore } from 'stores/stat-store';
+import { useSettingsStore } from 'stores/settings-store'; // Импорт хранилища настроек
+import UserPhoto from 'components/UserPhoto.vue';
 
 const $q = useQuasar();
-const authStore = useAuthStore();
 const router = useRouter();
+const authStore = useAuthStore();
 const statStore = useStatsStore();
+const settingsStore = useSettingsStore(); // Подключение хранилища настроек
 
 const leftDrawerOpen = ref(false);
 const rightDrawerOpen = ref(false);
@@ -219,7 +262,9 @@ function toggleRightDrawer() {
 
 // Функция для переключения темного режима
 function toggleDarkMode() {
-  $q.dark.toggle(); // Переключает между светлым и темным режимом
+  const newDarkModeState = !settingsStore.isDarkMode; // Переключаем значение
+  settingsStore.setDarkMode(newDarkModeState); // Сохраняем в store
+  $q.dark.set(newDarkModeState); // Применяем через Quasar
 }
 
 const logoutHandler = async () => {
@@ -232,5 +277,6 @@ const logoutHandler = async () => {
 // Загружаем данные при монтировании компонента
 onMounted(() => {
   statStore.fetchStats();
+  $q.dark.set(settingsStore.isDarkMode); // Применяем сохраненное состояние темного режима
 });
 </script>

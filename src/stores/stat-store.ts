@@ -11,6 +11,9 @@ export const useStatsStore = defineStore('stats', {
     usersCount: 0,
     bulletinsOnReviewCount: 0,
     bulletinsCount: 0,
+    webinarsCount: 0,
+    worksheetsCount: 0,
+    conferencesCount: 0,
   }),
   actions: {
     async fetchStats() {
@@ -24,6 +27,9 @@ export const useStatsStore = defineStore('stats', {
       this.usersCount = data.usersCount;
       this.bulletinsOnReviewCount = data.bulletinsOnReviewCount;
       this.bulletinsCount = data.bulletinsCount;
+      this.webinarsCount = data.webinarsCount;
+      this.worksheetsCount = data.worksheetsCount;
+      this.conferencesCount = data.conferencesCount;
     },
   },
 });

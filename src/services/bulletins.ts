@@ -16,9 +16,9 @@ export const getBulletinById = (id: string) => api.get(`/bulletins/${id}`);
 
 export const createBulletin = (data: Partial<Bulletin>) => api.post('/bulletins', data);
 
-export const updateBulletin = (id: string, data: Partial<Bulletin>) => api.put(`/bulletins/${id}`, data);
+export const updateBulletin = (id: number, data: Partial<Bulletin>) => api.put(`/bulletins/${id}`, data);
 
-export const deleteBulletin = (id: string) => api.delete(`/bulletins/${id}`);
+export const deleteBulletin = (id: number) => api.delete(`/bulletins/${id}`);
 
 export const approveBulletin = (id: number) => api.put(`/bulletins/${id}/approve`);
 

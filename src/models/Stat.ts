@@ -6,6 +6,9 @@ export interface Stat {
   centersCount: number
   centersOnReviewCount: number
   usersCount: number
-  bulletinsOnReviewCount: number,
+  bulletinsOnReviewCount: number
   bulletinsCount: number
+  webinarsCount: number
+  worksheetsCount: number
+  conferencesCount: number
 }
