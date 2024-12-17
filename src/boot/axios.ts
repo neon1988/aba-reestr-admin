@@ -28,4 +28,13 @@ export default defineBoot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
+// Добавляем интерцепторы (например, токен авторизации)
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => Promise.reject(error));
+
 export { api };

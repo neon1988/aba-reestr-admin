@@ -7,6 +7,8 @@ export interface Webinar {
   description: string;
   start_at: string;
   end_at: string;
+  stream_url: string;
+  price: number;
   record_file_id: number;
   subscribers_count: number;
   cover?: Image;

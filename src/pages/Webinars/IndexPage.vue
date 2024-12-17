@@ -4,13 +4,13 @@
       <q-toolbar-title>Вебинары</q-toolbar-title>
     </q-toolbar>
 
-    <q-card-section class="q-mb-md">
-      <q-btn label="Создать вебинар" color="green" flat
+    <q-card-section>
+      <q-btn label="Создать вебинар" color="green"
              :to="{ name: 'webinars.create' }" />
     </q-card-section>
 
     <!-- Фильтр по статусу (предстоящие и завершенные) -->
-    <q-card-section class="q-mb-md">
+    <q-card-section>
       <q-radio v-model="status"
                val="Upcoming"
                label="Предстоящие"
@@ -40,8 +40,11 @@
           <q-item-label class="text-h6" lines="1">
             {{ webinar.title }}
           </q-item-label>
-          <q-item-label caption>
-            {{ webinar.start_at }}
+          <q-item-label v-if="webinar.start_at" caption>
+            Дата начала: <date-time  :raw-date="webinar.start_at" />
+          </q-item-label>
+          <q-item-label v-if="webinar.end_at" caption>
+            Дата начала: <date-time  :raw-date="webinar.end_at" />
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -78,7 +81,8 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Webinar } from 'src/models/Webinar';
-import { useWebinarsStore } from 'stores/webinars-store'; // Используем store для вебинаров
+import { useWebinarsStore } from 'stores/webinars-store';
+import DateTime from 'components/DateTime.vue'; // Используем store для вебинаров
 
 const router = useRouter();
 const store = useWebinarsStore();
@@ -105,7 +109,7 @@ const handlePageChange = (page: number) => {
 
 // Метод для просмотра вебинара
 const viewWebinar = (webinar: Webinar) => {
-  router.push({ name: 'webinars.show', params: { id: webinar.id } });
+  router.push({ name: 'webinars.edit', params: { id: webinar.id } });
 };
 
 // Загружаем данные при монтировании компонента
