@@ -2,14 +2,14 @@
   <q-page padding>
     <!-- Заголовок страницы -->
     <q-toolbar>
-      <q-toolbar-title>Редактирование вебинара</q-toolbar-title>
+      <q-toolbar-title>Редактирование материала</q-toolbar-title>
     </q-toolbar>
 
     <!-- Форма редактирования -->
     <q-form @submit="submit" :valid="form.valid">
       <q-card>
         <q-card-section>
-          <!-- Обложка вебинара -->
+          <!-- Обложка материала -->
           <q-file
             label="Выберите файл обложки"
             v-model="cover"
@@ -29,20 +29,20 @@
             style="height: 10rem; max-width: 10rem;"
           />
 
-          <!-- Название вебинара -->
+          <!-- Название материала -->
           <q-input
             v-model="form.title"
-            label="Название вебинара"
+            label="Название материала"
             lazy-rules
             :error="form.invalid('title')"
             :error-message="form.errors.title"
             @blur="form.validate('title')"
           />
 
-          <!-- Описание вебинара -->
+          <!-- Описание материала -->
           <q-input
             v-model="form.description"
-            label="Описание вебинара"
+            label="Описание материала"
             type="textarea"
             autogrow
             :error="form.invalid('description')"
@@ -50,16 +50,7 @@
             @blur="form.validate('description')"
           />
 
-          <!-- Ссылка на трансляцию -->
-          <q-input
-            v-model="form.stream_url"
-            label="Ссылка на трансляцию"
-            :error="form.invalid('stream_url')"
-            :error-message="form.errors.stream_url"
-            @blur="form.validate('stream_url')"
-          />
-
-          <!-- Цена вебинара -->
+          <!-- Цена материала -->
           <q-input
             v-model="form.price"
             label="Цена"
@@ -70,44 +61,20 @@
             @blur="form.validate('price')"
           />
 
-          <!-- Даты вебинара -->
-          <div class="row q-col-gutter-sm">
-            <div class="col-6">
-              <q-input
-                v-model="form.start_at"
-                label="Дата начала"
-                type="datetime-local"
-                :error="form.invalid('start_at')"
-                :error-message="form.errors.start_at"
-                @blur="form.validate('start_at')"
-              />
-            </div>
-            <div class="col-6">
-              <q-input
-                v-model="form.end_at"
-                label="Дата окончания"
-                type="datetime-local"
-                :error="form.invalid('end_at')"
-                :error-message="form.errors.end_at"
-                @blur="form.validate('end_at')"
-              />
-            </div>
-          </div>
-
           <q-file
-            label="Выберите файл записи"
-            v-model="record"
+            label="Выберите файл"
+            v-model="file"
             @update:model-value="uploadRecordFile"
             filled
             color="primary"
-            :error="form.invalid('record_file')"
-            :error-message="form.errors.record_file"
-            @change="form.validate('record_file')"
+            :error="form.invalid('file')"
+            :error-message="form.errors.file"
+            @change="form.validate('file')"
           />
 
-          <q-video v-if="previewRecordFile"
+          <q-video v-if="previewFile"
                    spinner-color="white"
-                   :src="previewRecordFile.url"
+                   :src="previewFile.url"
           />
         </q-card-section>
 
@@ -146,7 +113,7 @@ import { useNotify } from 'src/composables/useNotify';
 import useValidationNotification from 'src/composables/useValidationNotification';
 import { Notify } from 'quasar';
 import { createImage } from 'src/services/images';
-import { getWebinarById } from 'src/services/webinars';
+import { getWorksheetById } from 'src/services/worksheets';
 import { createFile } from 'src/services/files';
 
 const router = useRouter();
@@ -155,51 +122,37 @@ const props = defineProps<{
 }>();
 
 // Инициализация формы
-const form = useForm('patch', `/webinars/${props.id}`, {
+const form = useForm('patch', `/worksheets/${props.id}`, {
+  cover: '',
   title: '',
   description: '',
-  start_at: '',
-  end_at: '',
-  cover: '',
-  stream_url: '',
   price: '',
-  record_file: '',
+  file: '',
 });
 
 // Состояния
 const loading = ref(true);
 const cover = ref<File | null>(null);
 const previewCover = ref<{ path: string; url: string } | null>(null);
-const record = ref<File | null>(null);
-const previewRecordFile = ref<{ path: string; url: string } | null>(null);
+const file = ref<File | null>(null);
+const previewFile = ref<{ path: string; url: string } | null>(null);
 
-function formatDateForInput(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toISOString().slice(0, 16);
-}
-
-// Получение данных вебинара при монтировании
-const loadWebinarData = async () => {
+// Получение данных материала при монтировании
+const loadWorksheetData = async () => {
   try {
-    const { data } = await getWebinarById(props.id);
-    if (data.data.start_at) {
-      data.data.start_at = formatDateForInput(data.data.start_at);
-    }
-    if (data.data.end_at) {
-      data.data.end_at = formatDateForInput(data.data.end_at);
-    }
+    const { data } = await getWorksheetById(props.id);
     if (data.data.cover) {
       previewCover.value = data.data.cover;
       data.data.cover = null;
     }
-    if (data.data.record_file) {
-      previewRecordFile.value = data.data.record_file;
-      data.data.record_file = null;
+    if (data.data.file) {
+      previewFile.value = data.data.file;
+      data.data.file = null;
     }
     form.setData(data.data);
   } catch (e) {
-    useNotify('Не удалось загрузить данные вебинара', 'negative');
-    router.push('/webinars'); // Возврат на список вебинаров при ошибке
+    useNotify('Не удалось загрузить данные материала', 'negative');
+    router.push('/worksheets'); // Возврат на список материалов при ошибке
   } finally {
     loading.value = false;
   }
@@ -220,12 +173,12 @@ const uploadFile = async () => {
 };
 
 const uploadRecordFile = async () => {
-  if (!record.value) return;
+  if (!file.value) return;
   loading.value = true;
   try {
-    const response = await createFile(record.value);
-    previewRecordFile.value = response.data;
-    form.record_file = response.data.path;
+    const response = await createFile(file.value);
+    previewFile.value = response.data;
+    form.file = response.data.path;
     useNotify('Файл записи успешно загружен', 'success');
   } finally {
     loading.value = false;
@@ -237,8 +190,8 @@ const submit = () => {
   form
     .submit()
     .then(() => {
-      useNotify('Вебинар успешно обновлён', 'success');
-      router.push('/webinars');
+      useNotify('Материал успешно обновлён', 'success');
+      router.push('/worksheets');
     })
     .catch((reason) => {
       const { response } = reason;
@@ -253,11 +206,11 @@ const submit = () => {
 
 // Отмена редактирования
 const cancel = () => {
-  router.push('/webinars');
+  router.push('/worksheets');
 };
 
 // Загружаем данные при монтировании
 onMounted(() => {
-  loadWebinarData();
+  loadWorksheetData();
 });
 </script>

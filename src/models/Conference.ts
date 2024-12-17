@@ -1,18 +1,13 @@
 import type { Image } from 'src/models/Image';
 import type { User } from 'src/models/User';
 
-export interface Webinar {
+export interface Conference {
   id: number;
   title: string;
   description: string;
   start_at: string;
   end_at: string;
-  stream_url: string;
   price: number;
-  record_file_id: number;
-  subscribers_count: number;
   cover?: Image;
-  record_file?: File;
-  subscribers: User[];
   creator?: User;
 }

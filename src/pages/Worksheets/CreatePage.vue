@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <q-toolbar>
-      <q-toolbar-title>Создание нового вебинара</q-toolbar-title>
+      <q-toolbar-title>Создание нового материала</q-toolbar-title>
     </q-toolbar>
 
     <q-form @submit="submit" :valid="form.valid">
@@ -10,7 +10,7 @@
           <q-file
             label="Выберите файл обложки"
             v-model="cover"
-            @update:model-value="uploadFile"
+            @update:model-value="uploadCover"
             filled
             color="primary"
             :error="form.invalid('cover')"
@@ -26,35 +26,26 @@
             style="height: 10rem; max-width: 10rem"
           />
 
-          <!-- Название вебинара -->
+          <!-- Название материала -->
           <q-input
             v-model="form.title"
-            label="Название вебинара"
+            label="Название материала"
             :error="form.invalid('title')"
             :error-message="form.errors.title"
             @change="form.validate('title')"
           />
 
-          <!-- Описание вебинара -->
+          <!-- Описание материала -->
           <q-input
             v-model="form.description"
-            label="Описание вебинара"
+            label="Описание материала"
             type="textarea"
             :error="form.invalid('description')"
             :error-message="form.errors.description"
             @change="form.validate('description')"
           />
 
-          <!-- Описание вебинара -->
-          <q-input
-            v-model="form.stream_url"
-            label="Ссылка на трансляцию"
-            :error="form.invalid('stream_url')"
-            :error-message="form.errors.stream_url"
-            @change="form.validate('stream_url')"
-          />
-
-          <!-- Описание вебинара -->
+          <!-- Описание материала -->
           <q-input
             v-model="form.price"
             label="Цена"
@@ -63,34 +54,28 @@
             @change="form.validate('price')"
           />
 
-          <!-- Даты вебинара -->
-          <div class="row q-col-gutter-sm">
-            <div class="col-6">
-              <q-input
-                v-model="form.start_at"
-                label="Дата начала"
-                type="datetime-local"
-                :error="form.invalid('start_at')"
-                :error-message="form.errors.start_at"
-                @blur="form.validate('start_at')"
-              />
-            </div>
-            <div class="col-6">
-              <q-input
-                v-model="form.end_at"
-                label="Дата окончания"
-                type="datetime-local"
-                :error="form.invalid('end_at')"
-                :error-message="form.errors.end_at"
-                @blur="form.validate('end_at')"
-              />
-            </div>
-          </div>
+          <q-file
+            label="Выберите файл записи"
+            v-model="file"
+            @update:model-value="uploadFile"
+            filled
+            color="primary"
+            :error="form.invalid('file')"
+            :error-message="form.errors.file"
+            @change="form.validate('file')"
+          />
+
+          <q-video v-if="previewFile"
+                   spinner-color="white"
+                   :src="previewFile.url"
+          />
+
         </q-card-section>
 
         <q-card-actions>
           <!-- Кнопка отправки -->
-          <q-btn label="Создать вебинар" type="submit" color="primary" :disabled="form.processing"/>
+          <q-btn label="Создать материал" type="submit" color="primary"
+                 :disabled="form.processing"/>
           <q-btn label="Отмена" color="secondary" @click="cancel"/>
         </q-card-actions>
       </q-card>
@@ -111,26 +96,27 @@ import { useNotify } from 'src/composables/useNotify';
 import { createImage } from 'src/services/images';
 import useValidationNotification from 'src/composables/useValidationNotification';
 import { Notify } from 'quasar';
+import { createFile } from 'src/services/files';
 
 const router = useRouter();
 // const store = useWebinarsStore();
 
 // Инициализация формы с помощью useForm
-const form = useForm('post', '/webinars', {
+const form = useForm('post', '/worksheets', {
   title: '',
   description: '',
-  start_at: '',
-  end_at: '',
   cover: '',
-  stream_url: '',
   price: '',
+  file: '',
 });
 
 const loading = ref(false);
 const cover = ref<File | null>(null);
+const file = ref<File | null>(null);
 const previewCover = ref<{ 'path': string, 'url': string } | null>(null);
+const previewFile = ref<{ 'path': string, 'url': string } | null>(null);
 
-const uploadFile = async () => {
+const uploadCover = async () => {
   if (!cover.value) return;
   loading.value = true;
   try {
@@ -143,11 +129,24 @@ const uploadFile = async () => {
   }
 };
 
+const uploadFile = async () => {
+  if (!file.value) return;
+  loading.value = true;
+  try {
+    const response = await createFile(file.value);
+    previewFile.value = response.data;
+    form.file = response.data.path;
+    useNotify('Файл успешно загружен', 'success');
+  } finally {
+    loading.value = false;
+  }
+};
+
 // Метод для отправки формы
 const submit = () => {
   form.submit().then(() => {
-    useNotify('Вебинар успешно создан', 'success');
-    router.push('/webinars'); // Перенаправление на список вебинаров
+    useNotify('Материал успешно создан', 'success');
+    router.push('/worksheets'); // Перенаправление на список материалов
   }).catch((reason) => {
     const { response } = reason;
     if (response.status === 422) {
@@ -159,8 +158,8 @@ const submit = () => {
   });
 };
 
-// Отмена создания вебинара, возвращаемся к списку
+// Отмена создания материала, возвращаемся к списку
 const cancel = () => {
-  router.push('/webinars');
+  router.push('/worksheets');
 };
 </script>

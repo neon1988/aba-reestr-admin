@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <q-toolbar>
-      <q-toolbar-title>Создание нового вебинара</q-toolbar-title>
+      <q-toolbar-title>Создание нового мероприятия</q-toolbar-title>
     </q-toolbar>
 
     <q-form @submit="submit" :valid="form.valid">
@@ -10,7 +10,7 @@
           <q-file
             label="Выберите файл обложки"
             v-model="cover"
-            @update:model-value="uploadFile"
+            @update:model-value="uploadCover"
             filled
             color="primary"
             :error="form.invalid('cover')"
@@ -26,26 +26,26 @@
             style="height: 10rem; max-width: 10rem"
           />
 
-          <!-- Название вебинара -->
+          <!-- Название мероприятия -->
           <q-input
             v-model="form.title"
-            label="Название вебинара"
+            label="Название мероприятия"
             :error="form.invalid('title')"
             :error-message="form.errors.title"
             @change="form.validate('title')"
           />
 
-          <!-- Описание вебинара -->
+          <!-- Описание мероприятия -->
           <q-input
             v-model="form.description"
-            label="Описание вебинара"
+            label="Описание мероприятия"
             type="textarea"
             :error="form.invalid('description')"
             :error-message="form.errors.description"
             @change="form.validate('description')"
           />
 
-          <!-- Описание вебинара -->
+          <!-- Описание мероприятия -->
           <q-input
             v-model="form.stream_url"
             label="Ссылка на трансляцию"
@@ -54,7 +54,7 @@
             @change="form.validate('stream_url')"
           />
 
-          <!-- Описание вебинара -->
+          <!-- Описание мероприятия -->
           <q-input
             v-model="form.price"
             label="Цена"
@@ -63,7 +63,7 @@
             @change="form.validate('price')"
           />
 
-          <!-- Даты вебинара -->
+          <!-- Даты мероприятия -->
           <div class="row q-col-gutter-sm">
             <div class="col-6">
               <q-input
@@ -90,7 +90,8 @@
 
         <q-card-actions>
           <!-- Кнопка отправки -->
-          <q-btn label="Создать вебинар" type="submit" color="primary" :disabled="form.processing"/>
+          <q-btn label="Создать мероприятие" type="submit" color="primary"
+                 :disabled="form.processing"/>
           <q-btn label="Отмена" color="secondary" @click="cancel"/>
         </q-card-actions>
       </q-card>
@@ -116,7 +117,7 @@ const router = useRouter();
 // const store = useWebinarsStore();
 
 // Инициализация формы с помощью useForm
-const form = useForm('post', '/webinars', {
+const form = useForm('post', '/conferences', {
   title: '',
   description: '',
   start_at: '',
@@ -130,7 +131,7 @@ const loading = ref(false);
 const cover = ref<File | null>(null);
 const previewCover = ref<{ 'path': string, 'url': string } | null>(null);
 
-const uploadFile = async () => {
+const uploadCover = async () => {
   if (!cover.value) return;
   loading.value = true;
   try {
@@ -146,8 +147,8 @@ const uploadFile = async () => {
 // Метод для отправки формы
 const submit = () => {
   form.submit().then(() => {
-    useNotify('Вебинар успешно создан', 'success');
-    router.push('/webinars'); // Перенаправление на список вебинаров
+    useNotify('Мероприятие успешно создано', 'success');
+    router.push('/conferences'); // Перенаправление на список вебинаров
   }).catch((reason) => {
     const { response } = reason;
     if (response.status === 422) {
@@ -159,8 +160,8 @@ const submit = () => {
   });
 };
 
-// Отмена создания вебинара, возвращаемся к списку
+// Отмена создания мероприятия, возвращаемся к списку
 const cancel = () => {
-  router.push('/webinars');
+  router.push('/conferences');
 };
 </script>

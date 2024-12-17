@@ -24,6 +24,6 @@ export const getWebinarById = (id: number) => api.get(`/webinars/${id}`);
 
 export const createWebinar = (data: Partial<Webinar>) => api.post('/webinars', data);
 
-export const updateWebinar = (id: number, data: Partial<Webinar>) => api.put(`/webinars/${id}`, data);
+export const updateWebinar = (id: number, data: Partial<Webinar>) => api.patch(`/webinars/${id}`, data);
 
 export const deleteWebinar = (id: number) => api.delete(`/webinars/${id}`);

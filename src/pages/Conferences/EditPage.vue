@@ -2,18 +2,18 @@
   <q-page padding>
     <!-- Заголовок страницы -->
     <q-toolbar>
-      <q-toolbar-title>Редактирование вебинара</q-toolbar-title>
+      <q-toolbar-title>Редактирование мероприятия</q-toolbar-title>
     </q-toolbar>
 
     <!-- Форма редактирования -->
     <q-form @submit="submit" :valid="form.valid">
       <q-card>
         <q-card-section>
-          <!-- Обложка вебинара -->
+          <!-- Обложка мероприятия -->
           <q-file
             label="Выберите файл обложки"
             v-model="cover"
-            @update:model-value="uploadFile"
+            @update:model-value="uploadCover"
             filled
             color="primary"
             :error="form.invalid('cover')"
@@ -29,20 +29,20 @@
             style="height: 10rem; max-width: 10rem;"
           />
 
-          <!-- Название вебинара -->
+          <!-- Название мероприятия -->
           <q-input
             v-model="form.title"
-            label="Название вебинара"
+            label="Название мероприятия"
             lazy-rules
             :error="form.invalid('title')"
             :error-message="form.errors.title"
             @blur="form.validate('title')"
           />
 
-          <!-- Описание вебинара -->
+          <!-- Описание мероприятия -->
           <q-input
             v-model="form.description"
-            label="Описание вебинара"
+            label="Описание мероприятия"
             type="textarea"
             autogrow
             :error="form.invalid('description')"
@@ -59,7 +59,7 @@
             @blur="form.validate('stream_url')"
           />
 
-          <!-- Цена вебинара -->
+          <!-- Цена мероприятия -->
           <q-input
             v-model="form.price"
             label="Цена"
@@ -70,7 +70,7 @@
             @blur="form.validate('price')"
           />
 
-          <!-- Даты вебинара -->
+          <!-- Даты мероприятия -->
           <div class="row q-col-gutter-sm">
             <div class="col-6">
               <q-input
@@ -95,19 +95,19 @@
           </div>
 
           <q-file
-            label="Выберите файл записи"
+            label="Выберите файл"
             v-model="record"
-            @update:model-value="uploadRecordFile"
+            @update:model-value="uploadFile"
             filled
             color="primary"
-            :error="form.invalid('record_file')"
-            :error-message="form.errors.record_file"
-            @change="form.validate('record_file')"
+            :error="form.invalid('file')"
+            :error-message="form.errors.file"
+            @change="form.validate('file')"
           />
 
-          <q-video v-if="previewRecordFile"
+          <q-video v-if="previewFile"
                    spinner-color="white"
-                   :src="previewRecordFile.url"
+                   :src="previewFile.url"
           />
         </q-card-section>
 
@@ -146,7 +146,7 @@ import { useNotify } from 'src/composables/useNotify';
 import useValidationNotification from 'src/composables/useValidationNotification';
 import { Notify } from 'quasar';
 import { createImage } from 'src/services/images';
-import { getWebinarById } from 'src/services/webinars';
+import { getConferenceById } from 'src/services/conferences';
 import { createFile } from 'src/services/files';
 
 const router = useRouter();
@@ -155,7 +155,7 @@ const props = defineProps<{
 }>();
 
 // Инициализация формы
-const form = useForm('patch', `/webinars/${props.id}`, {
+const form = useForm('patch', `/conferences/${props.id}`, {
   title: '',
   description: '',
   start_at: '',
@@ -163,7 +163,7 @@ const form = useForm('patch', `/webinars/${props.id}`, {
   cover: '',
   stream_url: '',
   price: '',
-  record_file: '',
+  file: '',
 });
 
 // Состояния
@@ -171,17 +171,17 @@ const loading = ref(true);
 const cover = ref<File | null>(null);
 const previewCover = ref<{ path: string; url: string } | null>(null);
 const record = ref<File | null>(null);
-const previewRecordFile = ref<{ path: string; url: string } | null>(null);
+const previewFile = ref<{ path: string; url: string } | null>(null);
 
 function formatDateForInput(dateString: string): string {
   const date = new Date(dateString);
   return date.toISOString().slice(0, 16);
 }
 
-// Получение данных вебинара при монтировании
-const loadWebinarData = async () => {
+// Получение данных мероприятия при монтировании
+const loadConferenceData = async () => {
   try {
-    const { data } = await getWebinarById(props.id);
+    const { data } = await getConferenceById(props.id);
     if (data.data.start_at) {
       data.data.start_at = formatDateForInput(data.data.start_at);
     }
@@ -192,21 +192,21 @@ const loadWebinarData = async () => {
       previewCover.value = data.data.cover;
       data.data.cover = null;
     }
-    if (data.data.record_file) {
-      previewRecordFile.value = data.data.record_file;
-      data.data.record_file = null;
+    if (data.data.file) {
+      previewFile.value = data.data.file;
+      data.data.file = null;
     }
     form.setData(data.data);
   } catch (e) {
-    useNotify('Не удалось загрузить данные вебинара', 'negative');
-    router.push('/webinars'); // Возврат на список вебинаров при ошибке
+    useNotify('Не удалось загрузить данные мероприятия', 'negative');
+    router.push('/conferences'); // Возврат на список вебинаров при ошибке
   } finally {
     loading.value = false;
   }
 };
 
 // Загрузка обложки
-const uploadFile = async () => {
+const uploadCover = async () => {
   if (!cover.value) return;
   loading.value = true;
   try {
@@ -219,14 +219,14 @@ const uploadFile = async () => {
   }
 };
 
-const uploadRecordFile = async () => {
+const uploadFile = async () => {
   if (!record.value) return;
   loading.value = true;
   try {
     const response = await createFile(record.value);
-    previewRecordFile.value = response.data;
-    form.record_file = response.data.path;
-    useNotify('Файл записи успешно загружен', 'success');
+    previewFile.value = response.data;
+    form.file = response.data.path;
+    useNotify('Файл успешно загружен', 'success');
   } finally {
     loading.value = false;
   }
@@ -237,8 +237,8 @@ const submit = () => {
   form
     .submit()
     .then(() => {
-      useNotify('Вебинар успешно обновлён', 'success');
-      router.push('/webinars');
+      useNotify('Мероприятие успешно обновлён', 'success');
+      router.push('/conferences');
     })
     .catch((reason) => {
       const { response } = reason;
@@ -253,11 +253,11 @@ const submit = () => {
 
 // Отмена редактирования
 const cancel = () => {
-  router.push('/webinars');
+  router.push('/conferences');
 };
 
 // Загружаем данные при монтировании
 onMounted(() => {
-  loadWebinarData();
+  loadConferenceData();
 });
 </script>
