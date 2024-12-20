@@ -4,6 +4,10 @@
       <q-toolbar-title>Пользователи</q-toolbar-title>
     </q-toolbar>
 
+    <div class="q-gutter-md q-mb-md q-mx-sm">
+      <q-input v-model="store.search" />
+    </div>
+
     <!-- Список специалистов -->
     <q-list v-if="store.users.length > 0">
       <q-item v-for="user in store.users"
@@ -20,7 +24,18 @@
         </q-item-section>
 
         <q-item-section>
-          <q-item-label>{{ user.name }}</q-item-label>
+          <q-item-label>{{ user.name }} {{ user.lastname }} {{ user.middlename }}</q-item-label>
+          <q-item-label>
+            <q-badge v-if="user.subscription_level == SubscriptionLevelEnums.ParentsAndRelated"
+                     label="Родители и смежники"/>
+            <q-badge v-if="user.subscription_level == SubscriptionLevelEnums.Specialists"
+                     label="Специалисты"/>
+            <q-badge v-if="user.subscription_level == SubscriptionLevelEnums.Centers"
+                     label="Центры"/>
+          </q-item-label>
+          <q-item-label v-if="user.subscription_level != SubscriptionLevelEnums.Free">
+            Продлена до <date-time :raw-date="user.subscription_ends_at" />
+          </q-item-label>
         </q-item-section>
       </q-item>
     </q-list>
@@ -47,17 +62,19 @@
 
     <!-- Показываем загрузку, пока данные загружаются -->
     <q-inner-loading :showing="store.loading">
-      <q-spinner-gears size="5rem" color="primary" />
+      <q-spinner-gears size="5rem" color="primary"/>
     </q-inner-loading>
 
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsersStore } from 'stores/users-store';
 import UserPhoto from 'components/UserPhoto.vue';
+import { SubscriptionLevelEnums } from 'src/enums/SubscriptionLevelEnums';
+import DateTime from 'components/DateTime.vue';
 
 const router = useRouter();
 const store = useUsersStore();
@@ -66,6 +83,10 @@ const handlePageChange = (page: number) => {
   store.currentPage = page; // Обновляем текущую страницу
   store.fetchUsers(); // Передаем фильтры
 };
+
+watch(() => store.search, () => {
+  store.fetchUsers();
+});
 
 // Загружаем данные при монтировании компонента
 onMounted(() => {

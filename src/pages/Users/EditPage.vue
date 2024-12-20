@@ -43,14 +43,62 @@
       />
     </q-card-section>
 
-    <q-card-section v-if="user">
-      <q-form @submit="saveChangesHandler" ref="form">
+    <q-card-section>
+      <q-form @submit="saveChangesHandler" :valid="form.valid">
         <!-- Имя -->
         <q-input
-          v-model="user.name"
+          v-model="form.name"
           outlined
+          lazy-rules
           label="Имя"
           class="q-mb-md"
+          :error="form.invalid('name')"
+          :error-message="form.errors.name"
+          @blur="form.validate('name')"
+        />
+
+        <q-input
+          v-model="form.lastname"
+          outlined
+          lazy-rules
+          label="Фамилия"
+          class="q-mb-md"
+          :error="form.invalid('lastname')"
+          :error-message="form.errors.lastname"
+          @blur="form.validate('lastname')"
+        />
+
+        <q-input
+          v-model="form.middlename"
+          outlined
+          lazy-rules
+          label="Отчество"
+          class="q-mb-md"
+          :error="form.invalid('middlename')"
+          :error-message="form.errors.middlename"
+          @blur="form.validate('middlename')"
+        />
+
+        <q-select
+          v-model="form.subscription_level"
+          :options="options"
+          label="Тип подписки"
+          lazy-rules
+          :error="form.invalid('subscription_level')"
+          :error-message="form.errors.subscription_level"
+          @blur="form.validate('subscription_level')"
+          emit-value
+          map-options
+        />
+
+        <q-input
+          v-model="form.subscription_ends_at"
+          label="Дата окончания подписки"
+          type="datetime-local"
+          lazy-rules
+          :error="form.invalid('subscription_ends_at')"
+          :error-message="form.errors.subscription_ends_at"
+          @blur="form.validate('subscription_ends_at')"
         />
 
         <q-btn
@@ -71,16 +119,25 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent, onMounted, ref } from 'vue';
-import { getUserById, updateUser, updateUserPhoto } from 'src/services/users';
+import { getUserById, updateUserPhoto } from 'src/services/users';
 import type { User } from 'src/models/User';
 import {
-  QAvatar, QBtn, QFile, useQuasar,
+  Notify, QAvatar, QBtn, QFile, useQuasar,
 } from 'quasar';
 import { useAuthStore } from 'stores/auth';
 import { useRouter } from 'vue-router';
 import UserPhoto from 'components/UserPhoto.vue';
+import { SubscriptionLevelEnums } from 'src/enums/SubscriptionLevelEnums';
+import { useForm } from 'laravel-precognition-vue';
+import { useNotify } from 'src/composables/useNotify';
+import useValidationNotification from 'src/composables/useValidationNotification';
 
 export default defineComponent({
+  computed: {
+    SubscriptionLevelEnums() {
+      return SubscriptionLevelEnums;
+    },
+  },
   props: {
     id: {
       type: Number as PropType<number>,
@@ -102,6 +159,14 @@ export default defineComponent({
 
     const photo = ref<File | null>(null); // Переменная для хранения выбранного файла
     const imagePreview = ref<string | null>(null);
+
+    const form = useForm('patch', `/users/${props.id}`, {
+      name: '',
+      lastname: '',
+      middlename: '',
+      subscription_level: '',
+      subscription_ends_at: '',
+    });
 
     // Обработчик изменения файла
     const handleFileChange = (file: File) => {
@@ -145,40 +210,72 @@ export default defineComponent({
       }
     };
 
+    function formatDateForInput(dateString: string): string {
+      const date = new Date(dateString);
+      return date.toISOString().slice(0, 16);
+    }
+
     // Функция для загрузки данных о специалисте
     const fetchUserHandler = async (id: number) => {
       loading.value = true;
       try {
         const response = await getUserById(id);
-        user.value = response.data.data as User; // Данные специалиста от Laravel Resource
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    const saveChangesHandler = async () => {
-      if (!user.value) return;
-      loading.value = true;
-      try {
-        const response = await updateUser(props.id, user.value);
-        user.value = response.data.user as User;
-
-        $q.notify({
-          message: response.data.message,
-          color: 'positive',
-          position: 'top',
-          timeout: 3000,
-        });
-
-        if (props.id && authStore.user) {
-          if (authStore.user.id === props.id) {
-            await authStore.fetchUser();
-          }
+        if (response.data.data.subscription_ends_at) {
+          response.data.data.subscription_ends_at = formatDateForInput(
+            response.data.data.subscription_ends_at,
+          );
         }
+        user.value = response.data.data;
+        form.setData(response.data.data);
       } finally {
         loading.value = false;
       }
     };
+
+    // Отправка формы
+    const saveChangesHandler = () => {
+      loading.value = true;
+      form
+        .submit()
+        .then(() => {
+          useNotify('Пользователь успешно обновлён', 'success');
+          loading.value = false;
+          if (props.id && authStore.user) {
+            if (authStore.user.id === props.id) {
+              authStore.fetchUser();
+            }
+          }
+        })
+        .catch((reason) => {
+          const { response } = reason;
+          if (response.status === 422) {
+            const { opts } = useValidationNotification(response.data);
+            Notify.create(opts.value);
+          } else {
+            useNotify(response.data.message, 'negative');
+          }
+          loading.value = false;
+        });
+    };
+
+    // Функция для преобразования Enum в массив опций
+    function enumToOptions(enums: typeof SubscriptionLevelEnums) {
+      return Object.keys(enums)
+        .filter((key) => Number.isNaN(Number(key))) // Убираем числовые ключи (обратные маппинги)
+        .map((label) => {
+          const value = enums[label as keyof typeof SubscriptionLevelEnums];
+          if (label === 'Free') label = 'Без подписки';
+          if (label === 'ParentsAndRelated') label = 'Родители и смежники';
+          if (label === 'Specialists') label = 'Специалисты';
+          if (label === 'Centers') label = 'Центры';
+          return {
+            label: `${label}`,
+            value,
+          };
+        });
+    }
+
+    const options = enumToOptions(SubscriptionLevelEnums);
 
     // Загружаем данные при монтировании компонента
     onMounted(() => {
@@ -196,6 +293,8 @@ export default defineComponent({
       handleFileChange,
       uploadImage,
       router,
+      options,
+      form,
     };
   },
 });

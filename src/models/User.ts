@@ -9,4 +9,6 @@ export interface User {
   middlename: string;
   photo?: Image;
   full_name?: string;
+  subscription_level: number;
+  subscription_ends_at: string;
 }

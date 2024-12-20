@@ -2,7 +2,7 @@ import type { User } from 'src/models/User'; // убедитесь, что мо�
 import api from './api'; // импорт основного API-инстанса
 
 // Получить список пользователей с поддержкой пагинации
-export const getUsers = (page: number = 1) => api.get(`/users?page=${page}`);
+export const getUsers = (search: string = '', page: number = 1) => api.get(`/users?search=${search}&page=${page}`);
 
 // Получить данные конкретного пользователя по ID
 export const getUserById = (id: string | number) => api.get(`/users/${id}`);

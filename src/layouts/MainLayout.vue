@@ -196,7 +196,7 @@
             :height="56"
           />
           <div class="text-weight-bold">{{ authStore.user.name }}</div>
-          <div>@rstoenescu</div>
+          <div></div>
         </div>
       </q-img>
 
