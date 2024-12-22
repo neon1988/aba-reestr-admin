@@ -7,20 +7,17 @@
     <q-form @submit="submit" :valid="form.valid">
       <q-card>
         <q-card-section>
-          <q-file
-            label="Выберите файл обложки"
-            v-model="cover"
-            @update:model-value="uploadFile"
-            filled
-            color="primary"
+          <upload-file-component
+            v-model="form.cover"
+            label="Выбрать обложку"
             :error="form.invalid('cover')"
             :error-message="form.errors.cover"
             @change="form.validate('cover')"
           />
 
           <q-img
-            v-if="previewCover"
-            :src="previewCover.url"
+            v-if="form.cover[0]"
+            :src="form.cover[0].url"
             spinner-color="white"
             class="q-mb-sm"
             style="height: 10rem; max-width: 10rem"
@@ -104,13 +101,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useForm } from 'laravel-precognition-vue';
 import { useNotify } from 'src/composables/useNotify';
-import { createImage } from 'src/services/images';
 import useValidationNotification from 'src/composables/useValidationNotification';
 import { Notify } from 'quasar';
+import UploadFileComponent from 'components/UploadFileComponent.vue';
+import type { File as FileModel } from 'src/models/File';
 
 const router = useRouter();
 // const store = useWebinarsStore();
@@ -121,27 +118,10 @@ const form = useForm('post', '/webinars', {
   description: '',
   start_at: '',
   end_at: '',
-  cover: '',
+  cover: [] as FileModel[],
   stream_url: '',
   price: '',
 });
-
-const loading = ref(false);
-const cover = ref<File | null>(null);
-const previewCover = ref<{ 'path': string, 'url': string } | null>(null);
-
-const uploadFile = async () => {
-  if (!cover.value) return;
-  loading.value = true;
-  try {
-    const response = await createImage(cover.value);
-    previewCover.value = response.data;
-    form.cover = response.data.path;
-    useNotify('Обложка успешно загружена', 'success');
-  } finally {
-    loading.value = false;
-  }
-};
 
 // Метод для отправки формы
 const submit = () => {

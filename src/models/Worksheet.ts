@@ -1,12 +1,12 @@
-import type { Image } from 'src/models/Image';
 import type { User } from 'src/models/User';
+import type { File } from 'src/models/File';
 
 export interface Worksheet {
   id: number;
   title: string;
   description: string;
   price: number;
-  cover?: Image;
-  file?: File;
-  creator?: User;
+  cover?: File;
+  file?: File[];
+  creator?: User[];
 }

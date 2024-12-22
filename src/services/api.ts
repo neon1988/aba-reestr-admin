@@ -6,7 +6,7 @@ const apiUrl = process.env.VUE_APP_API_URL;
 
 const api = axios.create({
   baseURL: apiUrl || '', // базовый URL вашего API
-  timeout: 10000, // Таймаут для запросов
+  timeout: 30 * 1000, // Таймаут для запросов
   headers: {
     'Content-Type': 'application/json',
   },
@@ -34,7 +34,15 @@ api.interceptors.response.use(
           // store.dispatch('auth/removeToken');
           // router.push({ name: 'login' });
           break;
-
+        case 413:
+          Notify.create({
+            color: 'red',
+            textColor: 'white',
+            icon: 'error',
+            caption: error.message,
+            message: 'Файл слишком большой',
+          });
+          return Promise.reject(error);
         case 422:
 
           Notify.create({
@@ -60,6 +68,9 @@ api.interceptors.response.use(
           break;
       }
     } else if (error.request) {
+      if (error instanceof axios.CanceledError) {
+        return Promise.reject(error);
+      }
       Notify.create({
         color: 'red',
         textColor: 'white',

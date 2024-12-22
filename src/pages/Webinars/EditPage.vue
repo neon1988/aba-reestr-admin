@@ -10,23 +10,20 @@
       <q-card>
         <q-card-section>
           <!-- Обложка вебинара -->
-          <q-file
-            label="Выберите файл обложки"
-            v-model="cover"
-            @update:model-value="uploadFile"
-            filled
-            color="primary"
+          <upload-file-component
+            v-model="form.cover"
+            label="Выбрать обложку"
             :error="form.invalid('cover')"
             :error-message="form.errors.cover"
             @change="form.validate('cover')"
           />
 
           <q-img
-            v-if="previewCover"
-            :src="previewCover.url"
+            v-if="form.cover"
+            :src="form.cover.url"
             spinner-color="white"
             class="q-mb-sm"
-            style="height: 10rem; max-width: 10rem;"
+            style="height: 10rem; max-width: 10rem"
           />
 
           <!-- Название вебинара -->
@@ -94,21 +91,14 @@
             </div>
           </div>
 
-          <q-file
-            label="Выберите файл записи"
-            v-model="record"
-            @update:model-value="uploadRecordFile"
-            filled
-            color="primary"
+          <upload-file-component
+            v-model="form.record_file"
+            label="Выбрать файл"
             :error="form.invalid('record_file')"
             :error-message="form.errors.record_file"
             @change="form.validate('record_file')"
           />
 
-          <q-video v-if="previewRecordFile"
-                   spinner-color="white"
-                   :src="previewRecordFile.url"
-          />
         </q-card-section>
 
         <!-- Действия -->
@@ -145,9 +135,9 @@ import { useForm } from 'laravel-precognition-vue';
 import { useNotify } from 'src/composables/useNotify';
 import useValidationNotification from 'src/composables/useValidationNotification';
 import { Notify } from 'quasar';
-import { createImage } from 'src/services/images';
 import { getWebinarById } from 'src/services/webinars';
-import { createFile } from 'src/services/files';
+import UploadFileComponent from 'components/UploadFileComponent.vue';
+import type { File as FileModel } from 'src/models/File';
 
 const router = useRouter();
 const props = defineProps<{
@@ -160,18 +150,14 @@ const form = useForm('patch', `/webinars/${props.id}`, {
   description: '',
   start_at: '',
   end_at: '',
-  cover: '',
+  cover: undefined as FileModel | undefined,
   stream_url: '',
   price: '',
-  record_file: '',
+  record_file: undefined as FileModel | undefined,
 });
 
 // Состояния
 const loading = ref(true);
-const cover = ref<File | null>(null);
-const previewCover = ref<{ path: string; url: string } | null>(null);
-const record = ref<File | null>(null);
-const previewRecordFile = ref<{ path: string; url: string } | null>(null);
 
 function formatDateForInput(dateString: string): string {
   const date = new Date(dateString);
@@ -188,45 +174,10 @@ const loadWebinarData = async () => {
     if (data.data.end_at) {
       data.data.end_at = formatDateForInput(data.data.end_at);
     }
-    if (data.data.cover) {
-      previewCover.value = data.data.cover;
-      data.data.cover = null;
-    }
-    if (data.data.record_file) {
-      previewRecordFile.value = data.data.record_file;
-      data.data.record_file = null;
-    }
     form.setData(data.data);
   } catch (e) {
     useNotify('Не удалось загрузить данные вебинара', 'negative');
     router.push('/webinars'); // Возврат на список вебинаров при ошибке
-  } finally {
-    loading.value = false;
-  }
-};
-
-// Загрузка обложки
-const uploadFile = async () => {
-  if (!cover.value) return;
-  loading.value = true;
-  try {
-    const response = await createImage(cover.value);
-    previewCover.value = response.data;
-    form.cover = response.data.path;
-    useNotify('Обложка успешно загружена', 'success');
-  } finally {
-    loading.value = false;
-  }
-};
-
-const uploadRecordFile = async () => {
-  if (!record.value) return;
-  loading.value = true;
-  try {
-    const response = await createFile(record.value);
-    previewRecordFile.value = response.data;
-    form.record_file = response.data.path;
-    useNotify('Файл записи успешно загружен', 'success');
   } finally {
     loading.value = false;
   }

@@ -53,7 +53,7 @@
     <!-- Сообщение, если специалистов нет -->
     <div v-else class="q-mt-md text-center">
       <q-banner>
-        Нет специалистов
+        Нет объявлений
       </q-banner>
     </div>
 

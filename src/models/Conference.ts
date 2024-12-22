@@ -1,5 +1,5 @@
-import type { Image } from 'src/models/Image';
 import type { User } from 'src/models/User';
+import type { File } from 'src/models/File';
 
 export interface Conference {
   id: number;
@@ -8,6 +8,6 @@ export interface Conference {
   start_at: string;
   end_at: string;
   price: number;
-  cover?: Image;
+  cover?: File;
   creator?: User;
 }

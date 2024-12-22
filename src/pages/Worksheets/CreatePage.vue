@@ -7,20 +7,17 @@
     <q-form @submit="submit" :valid="form.valid">
       <q-card>
         <q-card-section>
-          <q-file
-            label="Выберите файл обложки"
-            v-model="cover"
-            @update:model-value="uploadCover"
-            filled
-            color="primary"
+          <upload-file-component
+            v-model="form.cover"
+            label="Выбрать обложку"
             :error="form.invalid('cover')"
             :error-message="form.errors.cover"
             @change="form.validate('cover')"
           />
 
           <q-img
-            v-if="previewCover"
-            :src="previewCover.url"
+            v-if="form.cover"
+            :src="form.cover.url"
             spinner-color="white"
             class="q-mb-sm"
             style="height: 10rem; max-width: 10rem"
@@ -54,12 +51,9 @@
             @change="form.validate('price')"
           />
 
-          <q-file
-            label="Выберите файл записи"
-            v-model="file"
-            @update:model-value="uploadFile"
-            filled
-            color="primary"
+          <upload-file-component
+            v-model="form.file"
+            label="Выбрать файл"
             :error="form.invalid('file')"
             :error-message="form.errors.file"
             @change="form.validate('file')"
@@ -93,10 +87,10 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useForm } from 'laravel-precognition-vue';
 import { useNotify } from 'src/composables/useNotify';
-import { createImage } from 'src/services/images';
 import useValidationNotification from 'src/composables/useValidationNotification';
 import { Notify } from 'quasar';
-import { createFile } from 'src/services/files';
+import UploadFileComponent from 'components/UploadFileComponent.vue';
+import type { File as FileModel } from 'src/models/File';
 
 const router = useRouter();
 // const store = useWebinarsStore();
@@ -105,42 +99,12 @@ const router = useRouter();
 const form = useForm('post', '/worksheets', {
   title: '',
   description: '',
-  cover: '',
+  cover: undefined as FileModel | undefined,
   price: '',
-  file: '',
+  file: undefined as FileModel | undefined,
 });
 
-const loading = ref(false);
-const cover = ref<File | null>(null);
-const file = ref<File | null>(null);
-const previewCover = ref<{ 'path': string, 'url': string } | null>(null);
 const previewFile = ref<{ 'path': string, 'url': string } | null>(null);
-
-const uploadCover = async () => {
-  if (!cover.value) return;
-  loading.value = true;
-  try {
-    const response = await createImage(cover.value);
-    previewCover.value = response.data;
-    form.cover = response.data.path;
-    useNotify('Обложка успешно загружена', 'success');
-  } finally {
-    loading.value = false;
-  }
-};
-
-const uploadFile = async () => {
-  if (!file.value) return;
-  loading.value = true;
-  try {
-    const response = await createFile(file.value);
-    previewFile.value = response.data;
-    form.file = response.data.path;
-    useNotify('Файл успешно загружен', 'success');
-  } finally {
-    loading.value = false;
-  }
-};
 
 // Метод для отправки формы
 const submit = () => {

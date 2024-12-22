@@ -1,5 +1,5 @@
-import type { Image } from 'src/models/Image';
 import type { User } from 'src/models/User';
+import type { File } from 'src/models/File';
 
 export interface Webinar {
   id: number;
@@ -11,7 +11,7 @@ export interface Webinar {
   price: number;
   record_file_id: number;
   subscribers_count: number;
-  cover?: Image;
+  cover?: File;
   record_file?: File;
   subscribers: User[];
   creator?: User;

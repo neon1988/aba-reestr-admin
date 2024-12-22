@@ -33,10 +33,10 @@
       </q-item>
     </q-list>
 
-    <!-- Сообщение, если вебинаров нет -->
+    <!-- Сообщение, если материалов нет -->
     <div v-else class="q-mt-md text-center">
       <q-banner>
-        Нет вебинаров
+        Нет материалов
       </q-banner>
     </div>
 
@@ -74,7 +74,7 @@ const handlePageChange = (page: number) => {
   store.fetchWorksheets();
 };
 
-// Метод для просмотра вебинара
+// Метод для просмотра материала
 const viewWorksheet = (worksheet: Worksheet) => {
   router.push({ name: 'worksheets.edit', params: { id: worksheet.id } });
 };

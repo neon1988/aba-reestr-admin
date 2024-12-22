@@ -10,23 +10,20 @@
       <q-card>
         <q-card-section>
           <!-- Обложка мероприятия -->
-          <q-file
-            label="Выберите файл обложки"
-            v-model="cover"
-            @update:model-value="uploadCover"
-            filled
-            color="primary"
+          <upload-file-component
+            v-model="form.cover"
+            label="Выбрать обложку"
             :error="form.invalid('cover')"
             :error-message="form.errors.cover"
             @change="form.validate('cover')"
           />
 
           <q-img
-            v-if="previewCover"
-            :src="previewCover.url"
+            v-if="form.cover"
+            :src="form.cover.url"
             spinner-color="white"
             class="q-mb-sm"
-            style="height: 10rem; max-width: 10rem;"
+            style="height: 10rem; max-width: 10rem"
           />
 
           <!-- Название мероприятия -->
@@ -94,20 +91,12 @@
             </div>
           </div>
 
-          <q-file
-            label="Выберите файл"
-            v-model="record"
-            @update:model-value="uploadFile"
-            filled
-            color="primary"
+          <upload-file-component
+            v-model="form.file"
+            label="Выбрать обложку"
             :error="form.invalid('file')"
             :error-message="form.errors.file"
             @change="form.validate('file')"
-          />
-
-          <q-video v-if="previewFile"
-                   spinner-color="white"
-                   :src="previewFile.url"
           />
         </q-card-section>
 
@@ -145,9 +134,9 @@ import { useForm } from 'laravel-precognition-vue';
 import { useNotify } from 'src/composables/useNotify';
 import useValidationNotification from 'src/composables/useValidationNotification';
 import { Notify } from 'quasar';
-import { createImage } from 'src/services/images';
 import { getConferenceById } from 'src/services/conferences';
-import { createFile } from 'src/services/files';
+import UploadFileComponent from 'components/UploadFileComponent.vue';
+import type { File as FileModel } from 'src/models/File';
 
 const router = useRouter();
 const props = defineProps<{
@@ -156,22 +145,18 @@ const props = defineProps<{
 
 // Инициализация формы
 const form = useForm('patch', `/conferences/${props.id}`, {
+  cover: undefined as FileModel | undefined,
   title: '',
   description: '',
   start_at: '',
   end_at: '',
-  cover: '',
   stream_url: '',
   price: '',
-  file: '',
+  file: undefined as FileModel | undefined,
 });
 
 // Состояния
 const loading = ref(true);
-const cover = ref<File | null>(null);
-const previewCover = ref<{ path: string; url: string } | null>(null);
-const record = ref<File | null>(null);
-const previewFile = ref<{ path: string; url: string } | null>(null);
 
 function formatDateForInput(dateString: string): string {
   const date = new Date(dateString);
@@ -188,45 +173,10 @@ const loadConferenceData = async () => {
     if (data.data.end_at) {
       data.data.end_at = formatDateForInput(data.data.end_at);
     }
-    if (data.data.cover) {
-      previewCover.value = data.data.cover;
-      data.data.cover = null;
-    }
-    if (data.data.file) {
-      previewFile.value = data.data.file;
-      data.data.file = null;
-    }
     form.setData(data.data);
   } catch (e) {
     useNotify('Не удалось загрузить данные мероприятия', 'negative');
     router.push('/conferences'); // Возврат на список вебинаров при ошибке
-  } finally {
-    loading.value = false;
-  }
-};
-
-// Загрузка обложки
-const uploadCover = async () => {
-  if (!cover.value) return;
-  loading.value = true;
-  try {
-    const response = await createImage(cover.value);
-    previewCover.value = response.data;
-    form.cover = response.data.path;
-    useNotify('Обложка успешно загружена', 'success');
-  } finally {
-    loading.value = false;
-  }
-};
-
-const uploadFile = async () => {
-  if (!record.value) return;
-  loading.value = true;
-  try {
-    const response = await createFile(record.value);
-    previewFile.value = response.data;
-    form.file = response.data.path;
-    useNotify('Файл успешно загружен', 'success');
   } finally {
     loading.value = false;
   }
