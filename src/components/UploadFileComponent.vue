@@ -119,9 +119,6 @@ watch(
         percent: 100, // Считаем, что внешние файлы уже загружены
       }));
 
-      // eslint-disable-next-line no-console
-      console.log(filesArray);
-
       // Заменяем current files на новые файлы, создавая объекты File
       files.value = filesArray.map((
         uploadedFile: FileModel,
@@ -218,8 +215,6 @@ async function upload() {
           useNotify('Загрузка отменена', 'info'); // Уведомляем об отмене
         }
         cancelFile(index);
-        // eslint-disable-next-line no-console
-        console.error(error);
       } finally {
         // Завершаем загрузку
         uploading.value = null;

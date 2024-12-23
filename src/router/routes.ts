@@ -23,7 +23,14 @@ const routes: RouteRecordRaw[] = [
         name: 'specialists.show',
         component: () => import('pages/Specialists/ShowPage.vue'),
         meta: { requiresAuth: true },
-        props: true,
+        props: (route) => ({ id: Number(route.params.id) }),
+      },
+      {
+        path: 'specialists/:id/edit',
+        name: 'specialists.edit',
+        component: () => import('pages/Specialists/EditPage.vue'),
+        meta: { requiresAuth: true },
+        props: (route) => ({ id: Number(route.params.id) }),
       },
       {
         path: 'centers',

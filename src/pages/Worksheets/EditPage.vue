@@ -112,7 +112,7 @@ const props = defineProps<{
 }>();
 
 // Инициализация формы
-const form = useForm('patch', `/worksheets/${props.id}`, {
+const form = useForm('patch', () => `/worksheets/${props.id}`, {
   cover: undefined as FileModel | undefined,
   title: '',
   description: '',

@@ -102,7 +102,7 @@ const handlePageChange = (page: number) => {
 
 // Метод для просмотра специалиста
 const viewSpecialist = (specialist: Specialist) => {
-  router.push({ name: 'specialists.show', params: { id: specialist.id } });
+  router.push({ name: 'specialists.edit', params: { id: specialist.id } });
 };
 
 // Загружаем данные при монтировании компонента

@@ -96,7 +96,7 @@ const router = useRouter();
 // const store = useWebinarsStore();
 
 // Инициализация формы с помощью useForm
-const form = useForm('post', '/worksheets', {
+const form = useForm('post', () => '/worksheets', {
   title: '',
   description: '',
   cover: undefined as FileModel | undefined,

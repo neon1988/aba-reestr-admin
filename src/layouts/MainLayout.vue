@@ -28,7 +28,7 @@
 
         <user-photo
           v-if="authStore.user"
-          :user="authStore.user"
+          v-model="authStore.user"
           :fullscreen="false"
           size="2rem"
           @click="toggleRightDrawer"
@@ -188,7 +188,7 @@
         <div class="absolute-bottom bg-transparent">
           <user-photo
             v-if="authStore.user"
-            :user="authStore.user"
+            v-model="authStore.user"
             :fullscreen="true"
             size="3.5rem"
             class="q-mb-sm cursor-pointer"

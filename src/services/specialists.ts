@@ -12,7 +12,7 @@ export const getSpecialists = (status: StatusEnum, page: number = 1) => api.get(
 
 export const getSpecialistsOnCheck = (page: number = 1) => api.get(`/specialists/on_check?page=${page}`);
 
-export const getSpecialistById = (id: string) => api.get(`/specialists/${id}`);
+export const getSpecialistById = (id: number) => api.get(`/specialists/${id}`);
 
 export const createSpecialist = (data: Partial<Specialist>) => api.post('/specialists', data);
 

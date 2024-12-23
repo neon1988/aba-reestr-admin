@@ -145,7 +145,7 @@ const props = defineProps<{
 }>();
 
 // Инициализация формы
-const form = useForm('patch', `/webinars/${props.id}`, {
+const form = useForm('patch', () => `/webinars/${props.id}`, {
   title: '',
   description: '',
   start_at: '',

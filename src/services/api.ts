@@ -6,7 +6,7 @@ const apiUrl = process.env.VUE_APP_API_URL;
 
 const api = axios.create({
   baseURL: apiUrl || '', // базовый URL вашего API
-  timeout: 30 * 1000, // Таймаут для запросов
+  timeout: 180 * 1000, // Таймаут для запросов
   headers: {
     'Content-Type': 'application/json',
   },
@@ -40,6 +40,7 @@ api.interceptors.response.use(
             textColor: 'white',
             icon: 'error',
             caption: error.message,
+            position: 'top',
             message: 'Файл слишком большой',
           });
           return Promise.reject(error);
@@ -53,6 +54,7 @@ api.interceptors.response.use(
               .map((err) => `• ${err}`)
               .join('<br>'),
             caption: error.message,
+            position: 'top',
             html: true,
           });
           break;
@@ -63,6 +65,7 @@ api.interceptors.response.use(
             textColor: 'white',
             icon: 'error',
             caption: error.message,
+            position: 'top',
             message: error.response.data?.error || 'Произошла ошибка',
           });
           break;
@@ -76,6 +79,7 @@ api.interceptors.response.use(
         textColor: 'white',
         icon: 'error',
         caption: error.message || 'Нет ответа от сервера',
+        position: 'top',
       });
     } else {
       Notify.create({
@@ -83,6 +87,7 @@ api.interceptors.response.use(
         textColor: 'white',
         icon: 'error',
         caption: error.message || 'Произошла неизвестная ошибка',
+        position: 'top',
       });
     }
 

@@ -113,7 +113,7 @@ const router = useRouter();
 // const store = useWebinarsStore();
 
 // Инициализация формы с помощью useForm
-const form = useForm('post', '/webinars', {
+const form = useForm('post', () => '/webinars', {
   title: '',
   description: '',
   start_at: '',

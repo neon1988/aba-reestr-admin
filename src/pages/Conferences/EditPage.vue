@@ -144,7 +144,7 @@ const props = defineProps<{
 }>();
 
 // Инициализация формы
-const form = useForm('patch', `/conferences/${props.id}`, {
+const form = useForm('patch', () => `/conferences/${props.id}`, {
   cover: undefined as FileModel | undefined,
   title: '',
   description: '',

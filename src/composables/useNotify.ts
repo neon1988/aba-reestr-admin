@@ -5,6 +5,7 @@ export const useNotify = (message: string, type: 'success' | 'negative' | 'info'
     message,
     color: type === 'success' ? 'green' : type === 'negative' ? 'red' : 'blue',
     timeout: 3000, // Время, через которое уведомление исчезнет
+    position: 'top',
     actions: [
       {
         label: 'Закрыть',

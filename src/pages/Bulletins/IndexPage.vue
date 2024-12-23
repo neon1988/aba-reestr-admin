@@ -29,7 +29,7 @@
         <!-- Секция с аватаром -->
         <q-item-section avatar top>
           <user-photo
-            :user="bulletin.creator"
+            v-model="bulletin.creator"
             size="4rem"
             :fullscreen="false"
             :width="64"

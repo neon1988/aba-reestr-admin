@@ -94,7 +94,7 @@ import FilesList from 'components/FilesList.vue';
 // Определение пропсов
 const props = defineProps({
   id: {
-    type: String,
+    type: Number,
     required: true,
   },
 });
@@ -108,10 +108,10 @@ const loading = ref(false);
 const specialist = ref<Specialist | null>(null);
 
 // Функция для загрузки данных о специалисте
-const fetchSpecialistHandler = async (id: string) => {
+const fetchSpecialistHandler = async () => {
   loading.value = true;
   try {
-    const response = await getSpecialistById(id);
+    const response = await getSpecialistById(props.id);
     specialist.value = response.data.data as Specialist; // Данные специалиста от Laravel Resource
   } finally {
     loading.value = false;
@@ -160,6 +160,6 @@ const rejectSpecialistHandler = async () => {
 
 // Загружаем данные специалиста при монтировании компонента
 onMounted(() => {
-  fetchSpecialistHandler(props.id); // Используем id из пропсов
+  fetchSpecialistHandler(); // Используем id из пропсов
 });
 </script>

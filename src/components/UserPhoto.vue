@@ -7,8 +7,8 @@
     <!-- Аватар или заглушка -->
     <img
       v-if="url"
-      :src="computedImageUrl"
-      :alt="`${user.name || 'Пользователь'}'s avatar`"
+      :src="url"
+      :alt="`${modelValue.name || 'Пользователь'}'s avatar`"
       class="avatar-image"
     />
     <span v-else>{{ initials }}</span>
@@ -35,7 +35,7 @@ import ImageFullscreen from 'components/ImageFullscreen.vue';
 
 // Пропсы
 const props = defineProps({
-  user: {
+  modelValue: {
     type: Object as () => User,
     required: true,
   },
@@ -61,15 +61,14 @@ const props = defineProps({
   },
 });
 
-const showFullscreen = ref<boolean>(false);
+defineEmits(['update:modelValue']);
 
-// Аватар пользователя
-const url = ref<string | null>(props.user.photo?.url || null);
+const showFullscreen = ref<boolean>(false);
 
 // Генерация инициалов
 const initials = computed(() => {
-  if (!props.user.name) return 'U';
-  const nameParts = props.user.name.split(' ');
+  if (!props.modelValue.name) return 'U';
+  const nameParts = props.modelValue.name.split(' ');
   return nameParts.slice(0, 2)
     .map((part) => part.charAt(0).toUpperCase())
     .join('');
@@ -78,7 +77,7 @@ const initials = computed(() => {
 // Цвет аватара
 const avatarColor = computed(() => {
   const colors = ['blue', 'green', 'red', 'purple', 'orange', 'teal'];
-  const nameHash = Array.from(props.user.name || 'U').reduce(
+  const nameHash = Array.from(props.modelValue.name || 'U').reduce(
     (hash, char) => hash + char.charCodeAt(0),
     0,
   );
@@ -86,18 +85,20 @@ const avatarColor = computed(() => {
 });
 
 // Функция для добавления параметров w, h и q в URL изображения
-const computedImageUrl = computed(() => {
-  if (!url.value) return '';
+const url = computed(() => {
+  const photoUrl = props.modelValue.photo?.url;
+
+  if (!photoUrl) return '';
 
   try {
-    const urlObj = new URL(url.value);
+    const urlObj = new URL(photoUrl);
     if (props.width) urlObj.searchParams.set('w', props.width.toString());
     if (props.height) urlObj.searchParams.set('h', props.height.toString());
     if (props.quality) urlObj.searchParams.set('q', props.quality.toString());
     return urlObj.toString();
   } catch (e) { /* empty */ }
 
-  return url.value;
+  return photoUrl;
 });
 
 </script>

@@ -1,5 +1,4 @@
 // src/models/Specialist.ts
-import type { Image } from 'src/models/Image';
 import type { File } from 'src/models/File';
 
 export interface Specialist {
@@ -22,6 +21,6 @@ export interface Specialist {
   created_at: string;
   updated_at: string;
   deleted_at?: string;
-  photo?: Image;
+  photo?: File;
   files?: File[];
 }

@@ -8,7 +8,7 @@
     <q-card bordered>
       <q-card-section>
         <user-photo
-          :user="bulletin.creator"
+          v-model="bulletin.creator"
           :fullscreen="true"
           size="6rem"
           :width="224"

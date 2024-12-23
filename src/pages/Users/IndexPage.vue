@@ -16,7 +16,7 @@
         <!-- Секция с аватаром -->
         <q-item-section avatar>
           <user-photo
-            :user="user"
+            :modelValue="user"
             size="3rem"
             :width="48"
             :height="48"
