@@ -1,0 +1,1 @@
+import{ab as e}from"./index-B6qH9XSO.js";const n=(a=1)=>e.get("/webinars/upcoming",{params:{page:a}}),r=(a=1)=>e.get("/webinars/ended",{params:{page:a}}),t=a=>e.get(`/webinars/${a}`);export{r as a,t as b,n as g};

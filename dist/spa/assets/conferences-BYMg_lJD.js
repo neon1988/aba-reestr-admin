@@ -1,1 +1,0 @@
-import{a6 as n}from"./index-B5fKhRmK.js";const o=(e=1)=>n.get("/conferences/upcoming",{params:{page:e}}),s=(e=1)=>n.get("/conferences/ended",{params:{page:e}}),a=e=>n.get(`/conferences/${e}`);export{s as a,a as b,o as g};
