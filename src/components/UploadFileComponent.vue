@@ -210,6 +210,8 @@ async function upload() {
 
         uploadedFiles.value[index] = response.data.data as FileModel;
         uploadProgress.value[index].percent = 100;
+
+        useNotify('Файлы успешно загружены', 'success'); // Уведомление об успешной загрузке
       } catch (error) {
         if (error instanceof CanceledError) { // Проверяем, является ли ошибка отмененной
           useNotify('Загрузка отменена', 'info'); // Уведомляем об отмене
@@ -223,8 +225,6 @@ async function upload() {
   }, Promise.resolve()); // Начинаем с уже разрешенного промиса
 
   onChange();
-
-  useNotify('Файлы успешно загружены', 'success'); // Уведомление об успешной загрузке
 }
 
 function updateFiles(newFiles: File[] | File | null) {

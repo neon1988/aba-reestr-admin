@@ -15,4 +15,7 @@ export interface Webinar {
   record_file?: File;
   subscribers: User[];
   creator?: User;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
 }

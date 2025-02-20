@@ -10,4 +10,7 @@ export interface Conference {
   price: number;
   cover?: File;
   creator?: User;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
 }

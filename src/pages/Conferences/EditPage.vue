@@ -5,8 +5,16 @@
       <q-toolbar-title>Редактирование мероприятия</q-toolbar-title>
     </q-toolbar>
 
+    <q-banner v-if="conference && conference.deleted_at" inline-actions rounded
+              class="bg-primary text-white">
+      Мероприятие успешно удалено
+      <template v-slot:action>
+        <q-btn flat color="white" label="Восстановить" @click="deleteHandler" />
+      </template>
+    </q-banner>
+
     <!-- Форма редактирования -->
-    <q-form @submit="submit" :valid="form.valid">
+    <q-form v-else @submit="submit" :valid="form.valid">
       <q-card>
         <q-card-section>
           <!-- Обложка мероприятия -->
@@ -116,6 +124,7 @@
             @click="cancel"
             icon="close"
           />
+          <q-btn flat dense icon="delete" color="red" @click="deleteHandler" />
         </q-card-actions>
       </q-card>
     </q-form>
@@ -128,20 +137,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useForm } from 'laravel-precognition-vue';
 import { useNotify } from 'src/composables/useNotify';
 import useValidationNotification from 'src/composables/useValidationNotification';
 import { Notify } from 'quasar';
-import { getConferenceById } from 'src/services/conferences';
+import { deleteConference, getConferenceById } from 'src/services/conferences';
 import UploadFileComponent from 'components/UploadFileComponent.vue';
 import type { File as FileModel } from 'src/models/File';
+import type { Conference } from 'src/models/Conference';
+import { useStatsStore } from 'stores/stat-store';
 
+const statStore = useStatsStore();
 const router = useRouter();
 const props = defineProps<{
   id: number;
 }>();
+const conference = ref<Conference | null>(null);
 
 // Инициализация формы
 const form = useForm('patch', () => `/conferences/${props.id}`, {
@@ -173,7 +186,7 @@ const loadConferenceData = async () => {
     if (data.data.end_at) {
       data.data.end_at = formatDateForInput(data.data.end_at);
     }
-    form.setData(data.data);
+    conference.value = data.data;
   } catch (e) {
     useNotify('Не удалось загрузить данные мероприятия', 'negative');
     router.push('/conferences'); // Возврат на список вебинаров при ошибке
@@ -184,6 +197,7 @@ const loadConferenceData = async () => {
 
 // Отправка формы
 const submit = () => {
+  loading.value = true;
   form
     .submit()
     .then(() => {
@@ -198,13 +212,37 @@ const submit = () => {
       } else {
         useNotify(response.data.message, 'negative');
       }
+    })
+    .finally(() => {
+      loading.value = false;
     });
+};
+
+const deleteHandler = async () => {
+  if (!conference.value) return;
+
+  loading.value = true;
+  try {
+    const { data } = await deleteConference(conference.value.id);
+    conference.value = data.data;
+    await statStore.fetchStats();
+  } catch (e) {
+    useNotify('Не удалось удалить мероприятие', 'negative');
+  } finally {
+    loading.value = false;
+  }
 };
 
 // Отмена редактирования
 const cancel = () => {
   router.push('/conferences');
 };
+
+watch(conference, () => {
+  if (conference.value) {
+    form.setData(conference.value);
+  }
+});
 
 // Загружаем данные при монтировании
 onMounted(() => {

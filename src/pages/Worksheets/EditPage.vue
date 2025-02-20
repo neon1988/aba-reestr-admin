@@ -1,12 +1,21 @@
 <template>
   <q-page padding>
+
     <!-- Заголовок страницы -->
     <q-toolbar>
       <q-toolbar-title>Редактирование материала</q-toolbar-title>
     </q-toolbar>
 
+    <q-banner v-if="worksheet && worksheet.deleted_at" inline-actions rounded
+              class="bg-primary text-white">
+      Материал удален
+      <template v-slot:action>
+        <q-btn flat color="white" label="Восстановить" @click="deleteHandler" />
+      </template>
+    </q-banner>
+
     <!-- Форма редактирования -->
-    <q-form @submit="submit" :valid="form.valid">
+    <q-form v-else @submit="submit" :valid="form.valid">
       <q-card>
         <q-card-section>
           <!-- Обложка материала -->
@@ -84,6 +93,7 @@
             @click="cancel"
             icon="close"
           />
+          <q-btn flat dense icon="delete" color="red" @click="deleteHandler" />
         </q-card-actions>
       </q-card>
     </q-form>
@@ -96,20 +106,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useForm } from 'laravel-precognition-vue';
 import { useNotify } from 'src/composables/useNotify';
 import useValidationNotification from 'src/composables/useValidationNotification';
 import { Notify } from 'quasar';
-import { getWorksheetById } from 'src/services/worksheets';
+import { deleteWorksheet, getWorksheetById } from 'src/services/worksheets';
 import UploadFileComponent from 'components/UploadFileComponent.vue';
 import type { File as FileModel } from 'src/models/File';
+import type { Worksheet } from 'src/models/Worksheet';
+import { useStatsStore } from 'stores/stat-store';
 
+const statStore = useStatsStore();
 const router = useRouter();
 const props = defineProps<{
   id: number;
 }>();
+const worksheet = ref<Worksheet | null>(null);
 
 // Инициализация формы
 const form = useForm('patch', () => `/worksheets/${props.id}`, {
@@ -124,13 +138,27 @@ const form = useForm('patch', () => `/worksheets/${props.id}`, {
 const loading = ref(true);
 
 // Получение данных материала при монтировании
+const deleteHandler = async () => {
+  loading.value = true;
+  try {
+    const { data } = await deleteWorksheet(props.id);
+    worksheet.value = data.data;
+  } catch (e) {
+    useNotify('Не удалось удалить материал', 'negative');
+  } finally {
+    loading.value = false;
+  }
+};
+
 const loadWorksheetData = async () => {
+  loading.value = true;
   try {
     const { data } = await getWorksheetById(props.id);
-    form.setData(data.data);
+    worksheet.value = data.data;
   } catch (e) {
     useNotify('Не удалось загрузить данные материала', 'negative');
     router.push('/worksheets'); // Возврат на список материалов при ошибке
+    await statStore.fetchStats();
   } finally {
     loading.value = false;
   }
@@ -138,11 +166,11 @@ const loadWorksheetData = async () => {
 
 // Отправка формы
 const submit = () => {
+  loading.value = true;
   form
     .submit()
     .then(() => {
-      useNotify('Материал успешно обновлён', 'success');
-      router.push('/worksheets');
+      useNotify('Данные материала успешно сохранены', 'success');
     })
     .catch((reason) => {
       const { response } = reason;
@@ -152,6 +180,8 @@ const submit = () => {
       } else {
         useNotify(response.data.message, 'negative');
       }
+    }).finally(() => {
+      loading.value = false;
     });
 };
 
@@ -159,6 +189,12 @@ const submit = () => {
 const cancel = () => {
   router.push('/worksheets');
 };
+
+watch(worksheet, () => {
+  if (worksheet.value) {
+    form.setData(worksheet.value);
+  }
+});
 
 // Загружаем данные при монтировании
 onMounted(() => {
