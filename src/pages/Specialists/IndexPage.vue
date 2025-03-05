@@ -32,15 +32,15 @@
             :specialist="specialist"
             size="4rem"
             :fullscreen="false"
-            :width="64"
-            :height="64"
+            :width="128"
+            :height="128"
           />
         </q-item-section>
 
         <!-- Секция с информацией -->
         <q-item-section>
           <q-item-label class="text-h6" lines="1">
-            {{ specialist.name }} {{ specialist.firstname }}
+            {{ specialist.name }} {{ specialist.lastname }}
           </q-item-label>
           <q-item-label caption>
             {{ specialist.middlename }}

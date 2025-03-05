@@ -71,21 +71,21 @@
           />
 
           <q-input
-            v-model="form.name"
-            label="Имя"
-            lazy-rules
-            :error="form.invalid('name')"
-            :error-message="form.errors.name"
-            @blur="form.validate('name')"
-          />
-
-          <q-input
             v-model="form.lastname"
             label="Фамилия"
             lazy-rules
             :error="form.invalid('lastname')"
             :error-message="form.errors.lastname"
             @blur="form.validate('lastname')"
+          />
+
+          <q-input
+            v-model="form.name"
+            label="Имя"
+            lazy-rules
+            :error="form.invalid('name')"
+            :error-message="form.errors.name"
+            @blur="form.validate('name')"
           />
 
           <q-input

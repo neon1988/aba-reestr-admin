@@ -2,7 +2,7 @@
   <q-avatar :size="size" @click="url && (showFullscreen = true)">
     <img v-if="url"
       :src="computedImageUrl"
-         :alt="`${specialist.firstname || 'Пользователь'}'s avatar`"
+         :alt="`${specialist.name || 'Пользователь'}'s avatar`"
       class="avatar-image" />
 
     <!-- Полноэкранное изображение -->

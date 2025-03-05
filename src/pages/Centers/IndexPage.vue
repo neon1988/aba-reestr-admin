@@ -32,8 +32,8 @@
             :center="center"
             size="4rem"
             :fullscreen="false"
-            :width="64"
-            :height="64"
+            :width="256"
+            :height="256"
           />
         </q-item-section>
 

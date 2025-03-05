@@ -18,8 +18,8 @@
           <user-photo
             :modelValue="user"
             size="3rem"
-            :width="48"
-            :height="48"
+            :width="256"
+            :height="256"
           />
         </q-item-section>
 

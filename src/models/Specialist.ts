@@ -3,8 +3,8 @@ import type { File } from 'src/models/File';
 
 export interface Specialist {
   id: number;
+  lastname: string;
   name: string;
-  firstname: string;
   middlename?: string;
   country: string;
   region?: string;
