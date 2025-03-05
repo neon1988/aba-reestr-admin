@@ -1,1 +1,0 @@
-import{ab as e}from"./index-Uar3rvXj.js";const g=(a="",r=1)=>e.get(`/users?search=${a}&page=${r}`),d=a=>e.get(`/users/${a}`);var t=(a=>(a[a.Free=0]="Free",a[a.ParentsAndRelated=1]="ParentsAndRelated",a[a.Specialists=2]="Specialists",a[a.Centers=3]="Centers",a))(t||{});export{t as S,d as a,g};
