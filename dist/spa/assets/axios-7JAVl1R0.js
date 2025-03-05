@@ -1,1 +1,0 @@
-import{a9 as r,aa as o}from"./index-CC8DKlf9.js";const a=o.create({baseURL:"https://aba-expert.ru/api"}),i=r(({app:e})=>{e.config.globalProperties.$axios=o,e.config.globalProperties.$api=a});a.interceptors.request.use(e=>{const t=localStorage.getItem("token");return t&&(e.headers.Authorization=`Bearer ${t}`),e},e=>Promise.reject(e));export{a as api,i as default};

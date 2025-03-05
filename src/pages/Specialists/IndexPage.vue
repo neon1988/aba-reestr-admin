@@ -40,7 +40,7 @@
         <!-- Секция с информацией -->
         <q-item-section>
           <q-item-label class="text-h6" lines="1">
-            {{ specialist.lastname }} {{ specialist.firstname }}
+            {{ specialist.name }} {{ specialist.firstname }}
           </q-item-label>
           <q-item-label caption>
             {{ specialist.middlename }}

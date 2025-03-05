@@ -17,7 +17,7 @@
       <q-card bordered>
 
         <q-card-section>
-          <div class="text-h6">{{ specialist.firstname }} {{ specialist.lastname }}</div>
+          <div class="text-h6">{{ specialist.firstname }} {{ specialist.name }}</div>
           <q-chip
             v-if="specialist.status === StatusEnum.Accepted"
             color="green"
