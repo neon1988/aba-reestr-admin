@@ -41,10 +41,10 @@
             {{ webinar.title }}
           </q-item-label>
           <q-item-label v-if="webinar.start_at" caption>
-            Дата начала: <date-time  :raw-date="webinar.start_at" />
+            Дата начала: <date-time :raw-date="webinar.start_at" />
           </q-item-label>
           <q-item-label v-if="webinar.end_at" caption>
-            Дата начала: <date-time  :raw-date="webinar.end_at" />
+            Дата окончания: <date-time :raw-date="webinar.end_at" />
           </q-item-label>
         </q-item-section>
       </q-item>

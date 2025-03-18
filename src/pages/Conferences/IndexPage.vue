@@ -41,10 +41,10 @@
             {{ conference.title }}
           </q-item-label>
           <q-item-label v-if="conference.start_at" caption>
-            Дата начала: <date-time  :raw-date="conference.start_at" />
+            Дата начала: <date-time :raw-date="conference.start_at" />
           </q-item-label>
           <q-item-label v-if="conference.end_at" caption>
-            Дата начала: <date-time  :raw-date="conference.end_at" />
+            Дата окончания: <date-time :raw-date="conference.end_at" />
           </q-item-label>
         </q-item-section>
       </q-item>

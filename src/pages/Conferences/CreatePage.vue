@@ -64,7 +64,7 @@
           <div class="row q-col-gutter-sm">
             <div class="col-6">
               <q-input
-                v-model="form.start_at"
+                v-model="startAt"
                 label="Дата начала"
                 type="datetime-local"
                 :error="form.invalid('start_at')"
@@ -74,7 +74,7 @@
             </div>
             <div class="col-6">
               <q-input
-                v-model="form.end_at"
+                v-model="endAt"
                 label="Дата окончания"
                 type="datetime-local"
                 :error="form.invalid('end_at')"
@@ -102,6 +102,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useForm } from 'laravel-precognition-vue';
 import { useNotify } from 'src/composables/useNotify';
@@ -112,6 +113,8 @@ import type { File as FileModel } from 'src/models/File';
 
 const router = useRouter();
 // const store = useWebinarsStore();
+const startAt = ref<string | null>(null);
+const endAt = ref<string | null>(null);
 
 // Инициализация формы с помощью useForm
 const form = useForm('post', () => '/conferences', {
@@ -139,6 +142,22 @@ const submit = () => {
     }
   });
 };
+
+watch(startAt, (value) => {
+  if (value) {
+    form.start_at = new Date(value).toISOString();
+  } else {
+    form.start_at = '';
+  }
+});
+
+watch(endAt, (value) => {
+  if (value) {
+    form.end_at = new Date(value).toISOString();
+  } else {
+    form.end_at = '';
+  }
+});
 
 // Отмена создания мероприятия, возвращаемся к списку
 const cancel = () => {

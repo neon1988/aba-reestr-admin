@@ -79,7 +79,7 @@
           <div class="row q-col-gutter-sm">
             <div class="col-6">
               <q-input
-                v-model="form.start_at"
+                v-model="startAt"
                 label="Дата начала"
                 type="datetime-local"
                 :error="form.invalid('start_at')"
@@ -89,7 +89,7 @@
             </div>
             <div class="col-6">
               <q-input
-                v-model="form.end_at"
+                v-model="endAt"
                 label="Дата окончания"
                 type="datetime-local"
                 :error="form.invalid('end_at')"
@@ -143,7 +143,7 @@ import { useRouter } from 'vue-router';
 import { useForm } from 'laravel-precognition-vue';
 import { useNotify } from 'src/composables/useNotify';
 import useValidationNotification from 'src/composables/useValidationNotification';
-import { Notify } from 'quasar';
+import { Notify, date as dateUtils } from 'quasar';
 import { deleteWebinar, getWebinarById } from 'src/services/webinars';
 import UploadFileComponent from 'components/UploadFileComponent.vue';
 import type { File as FileModel } from 'src/models/File';
@@ -156,6 +156,8 @@ const props = defineProps<{
   id: number;
 }>();
 const webinar = ref<Webinar | null>(null);
+const startAt = ref<string | null>(null);
+const endAt = ref<string | null>(null);
 
 // Инициализация формы
 const form = useForm('patch', () => `/webinars/${props.id}`, {
@@ -172,22 +174,11 @@ const form = useForm('patch', () => `/webinars/${props.id}`, {
 // Состояния
 const loading = ref(true);
 
-function formatDateForInput(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toISOString().slice(0, 16);
-}
-
 // Получение данных вебинара при монтировании
 const loadWebinarData = async () => {
   loading.value = true;
   try {
     const { data } = await getWebinarById(props.id);
-    if (data.data.start_at) {
-      data.data.start_at = formatDateForInput(data.data.start_at);
-    }
-    if (data.data.end_at) {
-      data.data.end_at = formatDateForInput(data.data.end_at);
-    }
     webinar.value = data.data;
   } catch (e) {
     useNotify('Не удалось загрузить данные вебинара', 'negative');
@@ -242,6 +233,28 @@ const cancel = () => {
 watch(webinar, () => {
   if (webinar.value) {
     form.setData(webinar.value);
+    if (webinar.value.start_at) {
+      startAt.value = dateUtils.formatDate(webinar.value.start_at, 'YYYY-MM-DDTHH:mm');
+    }
+    if (webinar.value.end_at) {
+      endAt.value = dateUtils.formatDate(webinar.value.end_at, 'YYYY-MM-DDTHH:mm');
+    }
+  }
+});
+
+watch(startAt, (value) => {
+  if (value) {
+    form.start_at = new Date(value).toISOString();
+  } else {
+    form.start_at = '';
+  }
+});
+
+watch(endAt, (value) => {
+  if (value) {
+    form.end_at = new Date(value).toISOString();
+  } else {
+    form.end_at = '';
   }
 });
 
