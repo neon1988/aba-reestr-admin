@@ -5,6 +5,7 @@ export interface Conference {
   id: number;
   title: string;
   description: string;
+  registration_url: string;
   start_at: string;
   end_at: string;
   price: number;

@@ -1,1 +1,0 @@
-import{ab as a}from"./index-tVqCDBWc.js";const n=(e=1)=>a.get("/webinars/upcoming",{params:{page:e}}),t=(e=1)=>a.get("/webinars/ended",{params:{page:e}}),r=e=>a.get(`/webinars/${e}`),i=e=>a.delete(`/webinars/${e}`);export{t as a,r as b,i as d,n as g};

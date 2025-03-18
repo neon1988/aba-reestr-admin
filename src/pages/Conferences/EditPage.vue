@@ -57,11 +57,11 @@
 
           <!-- Ссылка на трансляцию -->
           <q-input
-            v-model="form.stream_url"
-            label="Ссылка на трансляцию"
-            :error="form.invalid('stream_url')"
-            :error-message="form.errors.stream_url"
-            @blur="form.validate('stream_url')"
+            v-model="form.registration_url"
+            label="Ссылка на регистрацию"
+            :error="form.invalid('registration_url')"
+            :error-message="form.errors.registration_url"
+            @blur="form.validate('registration_url')"
           />
 
           <!-- Цена мероприятия -->
@@ -99,13 +99,6 @@
             </div>
           </div>
 
-          <upload-file-component
-            v-model="form.file"
-            label="Выбрать обложку"
-            :error="form.invalid('file')"
-            :error-message="form.errors.file"
-            @change="form.validate('file')"
-          />
         </q-card-section>
 
         <!-- Действия -->
@@ -163,9 +156,8 @@ const form = useForm('patch', () => `/conferences/${props.id}`, {
   description: '',
   start_at: '',
   end_at: '',
-  stream_url: '',
+  registration_url: '',
   price: '',
-  file: undefined as FileModel | undefined,
 });
 
 // Состояния

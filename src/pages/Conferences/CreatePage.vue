@@ -44,11 +44,11 @@
 
           <!-- Описание мероприятия -->
           <q-input
-            v-model="form.stream_url"
-            label="Ссылка на трансляцию"
-            :error="form.invalid('stream_url')"
-            :error-message="form.errors.stream_url"
-            @change="form.validate('stream_url')"
+            v-model="form.registration_url"
+            label="Ссылка на регистрацию"
+            :error="form.invalid('registration_url')"
+            :error-message="form.errors.registration_url"
+            @change="form.validate('registration_url')"
           />
 
           <!-- Описание мероприятия -->
@@ -120,7 +120,7 @@ const form = useForm('post', () => '/conferences', {
   start_at: '',
   end_at: '',
   cover: undefined as FileModel | undefined,
-  stream_url: '',
+  registration_url: '',
   price: '',
 });
 
