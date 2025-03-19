@@ -66,7 +66,7 @@
       />
 
       <q-input
-        v-model="form.subscription_ends_at"
+        v-model="subscriptionEndsAt"
         label="Дата окончания подписки"
         type="datetime-local"
         lazy-rules
@@ -95,7 +95,7 @@ import {
 } from 'vue';
 import { useRouter } from 'vue-router';
 import { getUserById } from 'src/services/users';
-import { Notify } from 'quasar';
+import { date as dateUtils, Notify } from 'quasar';
 import { SubscriptionLevelEnums } from 'src/enums/SubscriptionLevelEnums';
 import { useForm } from 'laravel-precognition-vue';
 import { useNotify } from 'src/composables/useNotify';
@@ -106,6 +106,7 @@ import { useAuthStore } from 'stores/auth';
 
 const router = useRouter();
 const authStore = useAuthStore();
+const subscriptionEndsAt = ref<string | null>(null);
 
 const props = defineProps<{
   id: number;
@@ -122,17 +123,12 @@ const form = useForm('patch', () => `/users/${props.id}`, {
 
 const loading = ref(true);
 
-function formatDateForInput(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toISOString().slice(0, 16);
-}
-
 // Получение данных материала при монтировании
 const loadUserData = async () => {
   try {
     const { data } = await getUserById(props.id);
     if (data.data.subscription_ends_at) {
-      data.data.subscription_ends_at = formatDateForInput(data.data.subscription_ends_at);
+      subscriptionEndsAt.value = dateUtils.formatDate(data.data.subscription_ends_at, 'YYYY-MM-DDTHH:mm');
     }
     form.setData(data.data);
   } catch (e) {
@@ -172,9 +168,9 @@ function enumToOptions(enums: typeof SubscriptionLevelEnums) {
     .map((label) => {
       const value = enums[label as keyof typeof SubscriptionLevelEnums];
       if (label === 'Free') label = 'Без подписки';
-      if (label === 'ParentsAndRelated') label = 'Родители и смежники';
-      if (label === 'Specialists') label = 'Специалисты';
-      if (label === 'Centers') label = 'Центры';
+      if (label === 'ParentsAndRelated') label = 'Подписка A';
+      if (label === 'Specialists') label = 'Подписка B';
+      if (label === 'Centers') label = 'Подписка C';
       return {
         label: `${label}`,
         value,
@@ -190,6 +186,14 @@ watch(
     loadUserData();
   },
 );
+
+watch(subscriptionEndsAt, (value) => {
+  if (value) {
+    form.subscription_ends_at = new Date(value).toISOString();
+  } else {
+    form.subscription_ends_at = '';
+  }
+});
 
 // Загружаем данные при монтировании компонента
 onMounted(() => {

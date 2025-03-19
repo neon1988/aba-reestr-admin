@@ -39,12 +39,15 @@
 
         <!-- Секция с информацией -->
         <q-item-section>
-          <q-item-label>
+          <q-item-label class="q-mb-sm">
             {{ bulletin.creator.name }} {{ bulletin.creator.lastname }}
             {{ bulletin.creator.middlename }}
           </q-item-label>
-          <q-item-label>
+          <q-item-label class="q-mb-sm">
             <span v-html="bulletin.text.replace(/\n/g, '<br>')"></span>
+          </q-item-label>
+          <q-item-label caption>
+            <date-time :raw-date="bulletin.created_at" />
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -85,6 +88,7 @@ import { useBulletinsStore } from 'stores/bulletins-store';
 import { StatusEnum } from 'src/enums/StatusEnums';
 import { useStatsStore } from 'stores/stat-store';
 import UserPhoto from 'components/UserPhoto.vue';
+import DateTime from 'components/DateTime.vue';
 
 const router = useRouter();
 const store = useBulletinsStore();

@@ -1,1 +1,0 @@
-import{a9 as r,aa as a}from"./index-C2qAptKT.js";const o=a.create({baseURL:"https://api.aba-expert.ru/api"}),i=r(({app:e})=>{e.config.globalProperties.$axios=a,e.config.globalProperties.$api=o});o.interceptors.request.use(e=>{const t=localStorage.getItem("token");return t&&(e.headers.Authorization=`Bearer ${t}`),e},e=>Promise.reject(e));export{o as api,i as default};

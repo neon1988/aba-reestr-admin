@@ -27,11 +27,11 @@
           <q-item-label>{{ user.name }} {{ user.lastname }} {{ user.middlename }}</q-item-label>
           <q-item-label>
             <q-badge v-if="user.subscription_level == SubscriptionLevelEnums.ParentsAndRelated"
-                     label="Родители и смежники"/>
+                     label="Подписка A"/>
             <q-badge v-if="user.subscription_level == SubscriptionLevelEnums.Specialists"
-                     label="Специалисты"/>
+                     label="Подписка B"/>
             <q-badge v-if="user.subscription_level == SubscriptionLevelEnums.Centers"
-                     label="Центры"/>
+                     label="Подписка C"/>
           </q-item-label>
           <q-item-label v-if="user.subscription_level != SubscriptionLevelEnums.Free">
             Продлена до <date-time :raw-date="user.subscription_ends_at" />
