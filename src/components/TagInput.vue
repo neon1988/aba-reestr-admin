@@ -15,7 +15,8 @@
     new-value-mode="add-unique"
   >
     <template v-slot:no-option="scope">
-      <q-item v-if="!tagSelect.loading" clickable @click="addNewTag(scope.inputValue)">
+      <q-item v-if="!tagSelect.loading && scope.inputValue !== ''" clickable
+              @click="addNewTag(scope.inputValue)">
         <q-item-section>
           <q-item-label class="text-primary">
             Добавить новый тег "{{ scope.inputValue }}"?
