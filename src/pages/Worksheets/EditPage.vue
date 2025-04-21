@@ -67,6 +67,11 @@
             @blur="form.validate('price')"
           />
 
+          <tag-input
+            v-model="form.tags"
+            label="Выберите теги"
+          />
+
           <upload-file-component
             v-model="form.file"
             label="Выбрать файл"
@@ -117,6 +122,8 @@ import UploadFileComponent from 'components/UploadFileComponent.vue';
 import type { File as FileModel } from 'src/models/File';
 import type { Worksheet } from 'src/models/Worksheet';
 import { useStatsStore } from 'stores/stat-store';
+import type { Tag } from 'src/models/Tag';
+import TagInput from 'components/TagInput.vue';
 
 const statStore = useStatsStore();
 const router = useRouter();
@@ -132,6 +139,7 @@ const form = useForm('patch', () => `/worksheets/${props.id}`, {
   description: '',
   price: '',
   file: undefined as FileModel | undefined,
+  tags: [] as string[], // Поле для тегов
 });
 
 // Состояния
@@ -192,7 +200,10 @@ const cancel = () => {
 
 watch(worksheet, () => {
   if (worksheet.value) {
-    form.setData(worksheet.value);
+    form.setData({
+      ...worksheet.value,
+      tags: worksheet.value.tags ? worksheet.value.tags.map((tag: Tag) => tag.name) : [],
+    });
   }
 });
 

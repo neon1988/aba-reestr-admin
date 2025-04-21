@@ -1,0 +1,1 @@
+import{c as e,aK as c,aL as r,f as n,h as l,C as i}from"./index-BRIAkyOr.js";const d=e({name:"QCardActions",props:{...c,vertical:Boolean},setup(a,{slots:s}){const o=r(a),t=n(()=>`q-card__actions ${o.value} q-card__actions--${a.vertical===!0?"vert column":"horiz row"}`);return()=>l("div",{class:t.value},i(s.default))}});export{d as Q};

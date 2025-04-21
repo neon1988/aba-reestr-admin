@@ -51,6 +51,11 @@
             @change="form.validate('price')"
           />
 
+          <tag-input
+            v-model="form.tags"
+            label="Выберите теги"
+          />
+
           <upload-file-component
             v-model="form.file"
             label="Выбрать файл"
@@ -91,6 +96,7 @@ import useValidationNotification from 'src/composables/useValidationNotification
 import { Notify } from 'quasar';
 import UploadFileComponent from 'components/UploadFileComponent.vue';
 import type { File as FileModel } from 'src/models/File';
+import TagInput from 'components/TagInput.vue';
 
 const router = useRouter();
 // const store = useWebinarsStore();
@@ -102,6 +108,7 @@ const form = useForm('post', () => '/worksheets', {
   cover: undefined as FileModel | undefined,
   price: '',
   file: undefined as FileModel | undefined,
+  tags: [] as string[], // Поле для тегов
 });
 
 const previewFile = ref<{ 'path': string, 'url': string } | null>(null);
