@@ -1,14 +1,22 @@
 // src/services/specialists.ts
 import type { Specialist } from 'src/models/Specialist';
-import type { StatusEnum } from 'src/enums/StatusEnums';
+import { StatusEnum } from 'src/enums/StatusEnums';
+import type { AxiosRequestConfig } from 'axios'; // Добавляем импорт
 import api from './api';
 
-export const getSpecialists = (status: StatusEnum, page: number = 1) => api.get('/specialists', {
+export const getSpecialists = (
+  search: string = '',
+  status: StatusEnum = StatusEnum.Accepted,
+  page: number = 1,
+  options: { signal?: AbortSignal } = {},
+) => api.get('/specialists', {
   params: {
+    search,
     status,
     page,
   },
-});
+  signal: options.signal,
+} as AxiosRequestConfig);
 
 export const getSpecialistsOnCheck = (page: number = 1) => api.get(`/specialists/on_check?page=${page}`);
 

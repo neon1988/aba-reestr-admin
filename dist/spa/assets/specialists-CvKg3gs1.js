@@ -1,0 +1,1 @@
+import{S as p}from"./StatusEnums-Cpn04w7a.js";import{ab as t}from"./index-3CeRA5gR.js";const r=(s="",a=p.Accepted,e=1,i={})=>t.get("/specialists",{params:{search:s,status:a,page:e},signal:i.signal}),l=s=>t.get(`/specialists/${s}`),g=s=>t.put(`/specialists/${s}/approve`),n=s=>t.put(`/specialists/${s}/reject`);export{l as a,g as b,r as g,n as r};

@@ -1,8 +1,12 @@
 import type { User } from 'src/models/User'; // убедитесь, что модель User создана
+import type { AxiosRequestConfig } from 'axios'; // Добавляем импорт
 import api from './api'; // импорт основного API-инстанса
 
-// Получить список пользователей с поддержкой пагинации
-export const getUsers = (search: string = '', page: number = 1) => api.get(`/users?search=${search}&page=${page}`);
+export const getUsers = (
+  search: string = '',
+  page: number = 1,
+  options: { signal?: AbortSignal } = {},
+) => api.get(`/users?search=${search}&page=${page}`, { signal: options.signal } as AxiosRequestConfig);
 
 // Получить данные конкретного пользователя по ID
 export const getUserById = (id: string | number) => api.get(`/users/${id}`);
