@@ -1,0 +1,1 @@
+import{ab as e}from"./index-BIoqSzkr.js";const d=(a="",r=1,s={})=>e.get(`/users?search=${a}&page=${r}`,{signal:s.signal}),$=a=>e.get(`/users/${a}`);var t=(a=>(a[a.Free=0]="Free",a[a.ParentsAndRelated=1]="ParentsAndRelated",a[a.Specialists=2]="Specialists",a[a.Centers=3]="Centers",a))(t||{});export{t as S,$ as a,d as g};

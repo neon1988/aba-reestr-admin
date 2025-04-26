@@ -1,9 +1,11 @@
 <template>
   <q-avatar :size="size" @click="url && (showFullscreen = true)">
-    <img v-if="url"
-      :src="computedImageUrl"
-         :alt="`${specialist.name || 'Пользователь'}'s avatar`"
-      class="avatar-image" />
+    <image-component
+      v-if="url" class="avatar-image"
+      :alt="`${specialist.name || 'Пользователь'}'s avatar`"
+      :url="computedImageUrl"
+      :max-width="width"
+      :max-height="height" />
 
     <!-- Полноэкранное изображение -->
     <image-fullscreen v-if="fullscreen && url" v-model:show="showFullscreen">
@@ -23,6 +25,7 @@
 import { ref, computed } from 'vue';
 import type { Specialist } from 'src/models/Specialist';
 import ImageFullscreen from 'components/ImageFullscreen.vue';
+import ImageComponent from 'components/ImageComponent.vue';
 
 const props = defineProps({
   specialist: {

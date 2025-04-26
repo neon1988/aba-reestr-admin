@@ -15,13 +15,13 @@
             @change="form.validate('cover')"
           />
 
-          <q-img
-            v-if="form.cover[0]"
-            :src="form.cover[0].url"
+          <image-component
+            v-if="form.cover"
+            :url="form.cover.url"
             spinner-color="white"
             class="q-mb-sm"
-            style="height: 10rem; max-width: 10rem"
-          />
+            :max-width="200"
+            :max-height="200" />
 
           <!-- Название вебинара -->
           <q-input
@@ -109,6 +109,7 @@ import useValidationNotification from 'src/composables/useValidationNotification
 import { Notify } from 'quasar';
 import UploadFileComponent from 'components/UploadFileComponent.vue';
 import type { File as FileModel } from 'src/models/File';
+import ImageComponent from 'components/ImageComponent.vue';
 
 const router = useRouter();
 // const store = useWebinarsStore();
@@ -121,7 +122,7 @@ const form = useForm('post', () => '/webinars', {
   description: '',
   start_at: '',
   end_at: '',
-  cover: [] as FileModel[],
+  cover: undefined as FileModel | undefined,
   stream_url: '',
   price: '',
 });

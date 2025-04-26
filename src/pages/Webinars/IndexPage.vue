@@ -31,8 +31,12 @@
       >
         <!-- Секция с аватаром -->
         <q-item-section avatar>
-          <q-img v-if="webinar.cover"
-                 :src="webinar.cover.url" alt="cover" width="50px" height="50px"/>
+          <image-component
+            v-if="webinar.cover"
+            :url="webinar.cover.url"
+            alt="cover"
+            :max-width="50"
+            :max-height="50" />
         </q-item-section>
 
         <!-- Секция с информацией -->
@@ -82,7 +86,8 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Webinar } from 'src/models/Webinar';
 import { useWebinarsStore } from 'stores/webinars-store';
-import DateTime from 'components/DateTime.vue'; // Используем store для вебинаров
+import DateTime from 'components/DateTime.vue';
+import ImageComponent from 'components/ImageComponent.vue'; // Используем store для вебинаров
 
 const router = useRouter();
 const store = useWebinarsStore();

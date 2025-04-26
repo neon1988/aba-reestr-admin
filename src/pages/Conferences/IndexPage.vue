@@ -29,10 +29,13 @@
         :key="conference.id"
         clickable
       >
-        <!-- Секция с аватаром -->
         <q-item-section avatar>
-          <q-img v-if="conference.cover"
-                 :src="conference.cover.url" alt="cover" width="50px" height="50px"/>
+          <image-component
+            v-if="conference.cover"
+            :url="conference.cover.url"
+            alt="cover"
+            :max-width="50"
+            :max-height="50" />
         </q-item-section>
 
         <!-- Секция с информацией -->
@@ -82,7 +85,8 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Conference } from 'src/models/Conference';
 import { useConferencesStore } from 'stores/conferences-store';
-import DateTime from 'components/DateTime.vue'; // Используем store для мероприятий
+import DateTime from 'components/DateTime.vue';
+import ImageComponent from 'components/ImageComponent.vue'; // Используем store для мероприятий
 
 const router = useRouter();
 const store = useConferencesStore();

@@ -4,13 +4,12 @@
     :color="avatarColor"
     text-color="white"
     @click="url && (showFullscreen = true)">
-    <!-- Аватар или заглушка -->
-    <img
-      v-if="url"
-      :src="url"
+    <image-component
+      v-if="url" class="avatar-image"
+      :url="url"
       :alt="`${modelValue.name || 'Пользователь'}'s avatar`"
-      class="avatar-image"
-    />
+      :max-width="width"
+      :max-height="height" />
     <span v-else>{{ initials }}</span>
 
     <!-- Полноэкранное изображение -->
@@ -32,6 +31,7 @@
 import { computed, ref } from 'vue';
 import type { User } from 'src/models/User';
 import ImageFullscreen from 'components/ImageFullscreen.vue';
+import ImageComponent from 'components/ImageComponent.vue';
 
 // Пропсы
 const props = defineProps({

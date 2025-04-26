@@ -62,13 +62,13 @@
             @change="form.validate('photo')"
           />
 
-          <q-img
+          <image-component
             v-if="form.photo"
-            :src="form.photo.url"
+            :url="form.photo.url"
             spinner-color="white"
             class="q-mb-sm"
-            style="height: 10rem; max-width: 10rem"
-          />
+            :max-width="200"
+            :max-height="200" />
 
           <q-input
             v-model="form.lastname"
@@ -271,6 +271,7 @@ import { useWorldStore } from 'stores/world-store';
 import { StatusEnum } from 'src/enums/StatusEnums';
 import type { Specialist } from 'src/models/Specialist';
 import { useStatsStore } from 'stores/stat-store';
+import ImageComponent from 'components/ImageComponent.vue';
 
 const $q = useQuasar();
 const worldStore = useWorldStore();

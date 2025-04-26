@@ -14,13 +14,11 @@
         @change="form.validate('photo')"
       />
 
-      <q-img
-        v-if="form.photo"
-        :src="form.photo.url"
-        spinner-color="white"
-        class="q-mb-md"
-        style="height: 10rem; max-width: 10rem"
-      />
+      <image-component
+        v-if="form.photo" class="q-mb-md"
+        :url="form.photo.url"
+        :max-width="200"
+        :max-height="200" />
 
       <!-- Имя -->
       <q-input
@@ -103,6 +101,7 @@ import useValidationNotification from 'src/composables/useValidationNotification
 import UploadFileComponent from 'components/UploadFileComponent.vue';
 import type { File as FileModel } from 'src/models/File';
 import { useAuthStore } from 'stores/auth';
+import ImageComponent from 'components/ImageComponent.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();

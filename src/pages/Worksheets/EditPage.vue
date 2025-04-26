@@ -27,13 +27,13 @@
             @change="form.validate('cover')"
           />
 
-          <q-img
+          <image-component
             v-if="form.cover"
-            :src="form.cover.url"
+            :url="form.cover.url"
             spinner-color="white"
             class="q-mb-sm"
-            style="height: 10rem; max-width: 10rem"
-          />
+            :max-width="200"
+            :max-height="200" />
 
           <!-- Название материала -->
           <q-input
@@ -124,6 +124,7 @@ import type { Worksheet } from 'src/models/Worksheet';
 import { useStatsStore } from 'stores/stat-store';
 import type { Tag } from 'src/models/Tag';
 import TagInput from 'components/TagInput.vue';
+import ImageComponent from 'components/ImageComponent.vue';
 
 const statStore = useStatsStore();
 const router = useRouter();

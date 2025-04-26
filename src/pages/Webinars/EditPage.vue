@@ -26,13 +26,13 @@
             @change="form.validate('cover')"
           />
 
-          <q-img
+          <image-component
             v-if="form.cover"
-            :src="form.cover.url"
+            :url="form.cover.url"
             spinner-color="white"
             class="q-mb-sm"
-            style="height: 10rem; max-width: 10rem"
-          />
+            :max-width="200"
+            :max-height="200" />
 
           <!-- Название вебинара -->
           <q-input
@@ -149,6 +149,7 @@ import UploadFileComponent from 'components/UploadFileComponent.vue';
 import type { File as FileModel } from 'src/models/File';
 import type { Webinar } from 'src/models/Webinar';
 import { useStatsStore } from 'stores/stat-store';
+import ImageComponent from 'components/ImageComponent.vue';
 
 const statStore = useStatsStore();
 const router = useRouter();

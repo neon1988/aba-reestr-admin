@@ -15,13 +15,13 @@
             @change="form.validate('cover')"
           />
 
-          <q-img
+          <image-component
             v-if="form.cover"
-            :src="form.cover.url"
+            :url="form.cover.url"
             spinner-color="white"
             class="q-mb-sm"
-            style="height: 10rem; max-width: 10rem"
-          />
+            :max-width="200"
+            :max-height="200" />
 
           <!-- Название материала -->
           <q-input
@@ -97,6 +97,7 @@ import { Notify } from 'quasar';
 import UploadFileComponent from 'components/UploadFileComponent.vue';
 import type { File as FileModel } from 'src/models/File';
 import TagInput from 'components/TagInput.vue';
+import ImageComponent from 'components/ImageComponent.vue';
 
 const router = useRouter();
 // const store = useWebinarsStore();
