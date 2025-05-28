@@ -22,7 +22,9 @@
             v-if="worksheet.cover"
             :url="worksheet.cover.url"
             :max-width="50"
-            :max-height="50" />
+            :max-height="50"
+            quasar-component
+          />
         </q-item-section>
 
         <!-- Секция с информацией -->

@@ -35,6 +35,7 @@
           class="q-ml-md cursor-pointer"
           :width="32"
           :height="32"
+          quasar-component
         />
 
       </q-toolbar>
@@ -194,6 +195,7 @@
             class="q-mb-sm cursor-pointer"
             :width="56"
             :height="56"
+            quasar-component
           />
           <div class="text-weight-bold">{{ authStore.user.name }}</div>
           <div></div>

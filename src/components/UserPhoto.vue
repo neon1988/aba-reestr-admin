@@ -9,28 +9,17 @@
       :url="url"
       :alt="`${modelValue.name || 'Пользователь'}'s avatar`"
       :max-width="width"
-      :max-height="height" />
+      :max-height="height"
+      :quasar-component="quasarComponent"
+      :allow-fullscreen="fullscreen"
+    />
     <span v-else>{{ initials }}</span>
-
-    <!-- Полноэкранное изображение -->
-    <image-fullscreen v-if="fullscreen && url" v-model:show="showFullscreen">
-      <q-img
-        :src="url"
-        spinner-color="primary"
-        spinner-size="82px"
-        width="100%"
-        height="100%"
-        fit="scale-down">
-      </q-img>
-    </image-fullscreen>
   </q-avatar>
-
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import type { User } from 'src/models/User';
-import ImageFullscreen from 'components/ImageFullscreen.vue';
 import ImageComponent from 'components/ImageComponent.vue';
 
 // Пропсы
@@ -58,6 +47,10 @@ const props = defineProps({
   quality: {
     type: Number || null,
     default: null,
+  },
+  quasarComponent: {
+    type: Boolean,
+    default: false,
   },
 });
 

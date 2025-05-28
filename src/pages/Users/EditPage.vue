@@ -18,7 +18,11 @@
         v-if="form.photo" class="q-mb-md"
         :url="form.photo.url"
         :max-width="200"
-        :max-height="200" />
+        :max-height="200"
+        fit="scale-down"
+        allow-fullscreen
+        quasar-component
+      />
 
       <!-- Имя -->
       <q-input

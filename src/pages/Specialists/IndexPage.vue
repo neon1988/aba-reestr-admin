@@ -28,13 +28,15 @@
       >
         <!-- Секция с аватаром -->
         <q-item-section avatar>
-          <specialist-photo
-            :specialist="specialist"
-            size="4rem"
-            :fullscreen="false"
-            :width="128"
-            :height="128"
-          />
+          <q-avatar size="3rem">
+            <image-component
+              v-if="specialist.photo?.url"
+              :alt="`${specialist.name || 'Пользователь'}'s avatar`"
+              :url="specialist.photo?.url"
+              :max-width="200"
+              :max-height="200"
+            />
+          </q-avatar>
         </q-item-section>
 
         <!-- Секция с информацией -->
@@ -82,8 +84,8 @@ import { useRouter } from 'vue-router';
 import type { Specialist } from 'src/models/Specialist';
 import { useSpecialistsStore } from 'stores/specialists-store';
 import { StatusEnum } from 'src/enums/StatusEnums';
-import SpecialistPhoto from 'components/SpecialistPhoto.vue';
 import { useStatsStore } from 'stores/stat-store';
+import ImageComponent from 'components/ImageComponent.vue';
 
 const router = useRouter();
 const store = useSpecialistsStore();

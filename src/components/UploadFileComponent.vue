@@ -20,9 +20,8 @@
         >
           <div v-if="uploadedFiles[index]">
             <q-avatar v-if="isImage(uploadedFiles[index].name)"
-                      @click="openFile(uploadedFiles[index].url)">
-              <img :src="uploadedFiles[index].url">
-            </q-avatar>
+                      @click="openFile(uploadedFiles[index].url)"
+              icon="image" />
             <q-avatar v-else-if="isVideo(uploadedFiles[index].name)"
                       @click="openFile(uploadedFiles[index].url)"
                       icon="videocam" />
@@ -129,15 +128,15 @@ watch(
 );
 
 // Проверка, является ли файл изображением
-const isImage = (file: string) => {
-  const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
-  return imageExtensions.some((ext) => file.toLowerCase().endsWith(ext));
+const isImage = (fileName: string) => {
+  const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+  return imageExtensions.some((ext) => fileName.toLowerCase().endsWith(ext));
 };
 
 // Проверка, является ли файл видео
-const isVideo = (file: string) => {
+const isVideo = (fileName: string) => {
   const videoExtensions = ['mp4', 'avi', 'mov', 'mkv'];
-  return videoExtensions.some((ext) => file.toLowerCase().endsWith(ext));
+  return videoExtensions.some((ext) => fileName.toLowerCase().endsWith(ext));
 };
 
 function cleanUp() {

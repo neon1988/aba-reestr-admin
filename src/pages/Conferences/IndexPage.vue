@@ -35,7 +35,9 @@
             :url="conference.cover.url"
             alt="cover"
             :max-width="50"
-            :max-height="50" />
+            :max-height="50"
+            quasar-component
+          />
         </q-item-section>
 
         <!-- Секция с информацией -->

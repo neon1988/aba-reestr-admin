@@ -20,6 +20,9 @@
             :url="form.cover.url"
             spinner-color="white"
             class="q-mb-sm"
+            fit="scale-down"
+            allow-fullscreen
+            quasar-component
             :max-width="200"
             :max-height="200" />
 
@@ -83,6 +86,15 @@
               />
             </div>
           </div>
+
+          <upload-file-component
+            v-model="form.file"
+            label="Выбрать файл записи"
+            :error="form.invalid('file')"
+            :error-message="form.errors.file"
+            @change="form.validate('file')"
+          />
+
         </q-card-section>
 
         <q-card-actions>
@@ -126,6 +138,7 @@ const form = useForm('post', () => '/conferences', {
   cover: undefined as FileModel | undefined,
   registration_url: '',
   price: '',
+  file: undefined as FileModel | undefined,
 });
 
 // Метод для отправки формы

@@ -67,6 +67,9 @@
             :url="form.photo.url"
             spinner-color="white"
             class="q-mb-sm"
+            fit="scale-down"
+            allow-fullscreen
+            quasar-component
             :max-width="200"
             :max-height="200" />
 
